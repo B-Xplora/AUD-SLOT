@@ -409,6 +409,50 @@ Please contact your Top Priority Referral Manager for Assistance
     document.getElementById('helloModal').addEventListener('click', function(e){
       if(e.target === this) this.style.display = 'none';
     });
-  </script>
+  </script> 
+
+  <!-- Floating Customer Support Button -->
+<a href="https://services.zangi.com/dl/conversation/6652806670"
+   target="_blank"
+   class="support-btn">
+    💬 Customer Support
+</a>
+
+<style>
+.support-btn{
+    position:fixed;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    background:#007BFF;
+    color:#fff;
+    text-decoration:none;
+    padding:14px 22px;
+    border-radius:50px;
+    font:600 15px Arial, sans-serif;
+    box-shadow:0 8px 20px rgba(0,123,255,.35);
+    z-index:999999;
+    transition:all .3s ease;
+}
+
+.support-btn:hover{
+    background:#0056d6;
+    transform:translateY(-50%) scale(1.05);
+}
+
+@media (max-width:768px){
+    .support-btn{
+        top:auto;
+        bottom:20px;
+        right:15px;
+        transform:none;
+    }
+
+    .support-btn:hover{
+        transform:scale(1.05);
+    }
+}
+</style>
+  
 </body>
 </html>
