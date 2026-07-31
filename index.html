@@ -1,220 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Refund</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
-
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-        }
-        
-        .logo-font {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .hero-bg {
-            background: linear-gradient(135deg, #003087 0%, #0070BA 100%);
-        }
-
-        .paypal-blue {
-            color: #0070BA;
-        }
-
-        .amount-pulse {
-            animation: pulse 2.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.95; transform: scale(1.02); }
-        }
-
-        .loading-spinner {
-            animation: spin 1.2s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>R New</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #191b1f;
+      --sidebar: #181a20;
+      --primary: #0052ff;
+      --primary-light: #2563eb;
+      --text: #f5f6fa;
+      --subtle: #a0a4ad;
+      --accent: #0f1116;
+      --card: #23272f;
+      --green: #22c55e;
+      --blue: #2147ff;
+      --shadow: 0 4px 28px 0 rgba(0,0,0,0.16);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: 'Inter', Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 80px;
+      background: var(--sidebar);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 0;
+      gap: 30px;
+    }
+    .sidebar-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sidebar-icon.selected {
+      background: var(--primary);
+    }
+    .sidebar-icon svg {
+      fill: var(--text);
+      width: 24px; height: 24px;
+    }
+    .main {
+      flex: 1;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      padding: 24px 32px 0 32px;
+      gap: 18px;
+    }
+    .topbar input {
+      background: var(--card);
+      border: none;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 1rem;
+      flex: 1;
+      margin-left: 12px;
+      outline: none;
+    }
+    .topbar .settings-icon {
+      margin-left: 16px;
+      cursor: pointer;
+    }
+    .dashboard-content {
+      padding: 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      min-width: 0;
+    }
+    .balance-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .balance-section {
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .balance-amount {
+      font-size: 2.7rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+      color: var(--text);
+      letter-spacing: -1.5px;
+    }
+    .modern-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow);
+      font-size: 1.7rem;
+      cursor: pointer;
+      transition: background 0.18s, transform 0.11s;
+      outline: none;
+      margin-left: 18px;
+      position: relative;
+    }
+    .modern-btn:active {
+      background: var(--primary-light);
+      transform: scale(0.96);
+    }
+    .hello-modal {
+      position: fixed;
+      z-index: 999;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(20,22,30,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 190ms;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .hello-modal-content {
+      background: var(--card);
+      color: var(--text);
+      padding: 44px 44px 32px 44px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      min-width: 260px;
+      font-size: 1.22rem;
+      font-weight: 500;
+      position: relative;
+      animation: scaleIn 180ms;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.8);}
+      to   { transform: scale(1);}
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--subtle);
+      position: absolute;
+      top: 12px; right: 16px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: color 0.16s;
+      outline: none;
+    }
+    .close-btn:hover { color: var(--blue);}
+    .tabs {
+      display: flex;
+      gap: 36px;
+      margin-bottom: 10px;
+      margin-top: 12px;
+    }
+    .tab {
+      color: var(--subtle);
+      font-weight: 500;
+      cursor: pointer;
+      padding-bottom: 6px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border 0.2s;
+      font-size: 1.07rem;
+      letter-spacing: -.4px;
+    }
+    .tab.selected {
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+    }
+    .filters-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+    .filters-bar select {
+      background: var(--card);
+      color: var(--text);
+      border: none;
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-size: 1rem;
+      outline: none;
+    }
+    .transactions-table {
+      width: 100%;
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .transactions-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .transactions-table th, .transactions-table td {
+      padding: 20px 18px;
+      text-align: left;
+    }
+    .transactions-table th {
+      color: var(--subtle);
+      font-weight: 500;
+      background: var(--card);
+      font-size: 1rem;
+      border-bottom: 1px solid #232323;
+      letter-spacing: .2px;
+    }
+    .transactions-table td {
+      font-size: 1.08rem;
+    }
+    .transactions-table tr:not(:last-child) td {
+      border-bottom: 1px solid #22252b;
+    }
+    .money-bag {
+      font-size: 1.5rem;
+      margin-right: 13px;
+      vertical-align: middle;
+    }
+    .received {
+      color: var(--green);
+      font-weight: 500;
+    }
+    .footer {
+      text-align: center;
+      color: var(--subtle);
+      font-size: 1rem;
+      padding: 20px 0 10px 0;
+      background: none;
+    }
+    .verified {
+      color: var(--blue);
+      font-size: 1.04rem;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+    .footer-bar {
+      background: var(--accent);
+      color: var(--text);
+      font-size: 0.98rem;
+      padding: 6px 0;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 6px;
+      min-width: 320px;
+    }
+    /* Responsive styling */
+    @media (max-width: 900px) {
+      .dashboard-content { padding: 14px; }
+      .topbar { padding: 14px 12px 0 12px;}
+      .footer-bar { min-width: 190px; }
+    }
+    @media (max-width: 600px) {
+      .sidebar { width: 56px; }
+      .dashboard-content { padding: 6px; }
+      .topbar { padding: 6px 6px 0 6px;}
+      .hello-modal-content { min-width: 120px; padding: 22px 12px 19px 12px;}
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
-    <!-- NAVBAR -->
-    <nav class="bg-white border-b shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-x-3">
-                    <div class="w-9 h-9 bg-[#0070BA] rounded-2xl flex items-center justify-center text-white font-bold text-3xl logo-font">P</div>
-                    <div>
-                        <span class="text-2xl font-semibold tracking-tight logo-font text-slate-900">PayPal</span>
-                        <span class="text-2xl font-semibold tracking-tight logo-font paypal-blue">Refund</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-x-6 text-sm">
-                    <div class="hidden md:flex items-center gap-x-2 text-emerald-600">
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span class="font-medium">Australian Financial Commission Approved</span>
-                    </div>
-                </div>
-            </div>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="sidebar-icon selected" title="Dashboard">
+        <!-- Home Icon -->
+        <svg viewBox="0 0 24 24"><path d="M3 10.8V21h6v-5h6v5h6V10.8L12 3z"/></svg>
+      </div>
+      <div class="sidebar-icon" title="Night Mode">
+        <!-- Moon Icon -->
+        <svg viewBox="0 0 24 24"><path d="M20.742 13.045A8.088 8.088 0 0 1 11.955 3.258a8.093 8.093 0 1 0 8.787 9.787z"/></svg>
+      </div>
+      <div style="flex:1"></div>
+      <div class="sidebar-icon" title="Plus">
+        <svg viewBox="0 0 24 24"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"/></svg>
+      </div>
+      <div class="sidebar-icon" title="Refresh">
+        <svg viewBox="0 0 24 24"><path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5a5 5 0 0 1-5 5c-2.21 0-4.07-1.44-4.74-3.43l-1.92.51A7.002 7.002 0 0 0 19 13c0-3.87-3.13-7-7-7z"/></svg>
+      </div>
+      <div class="sidebar-icon" title="Download">
+        <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-6h-4V4H9v8H5l7 7 7-7z"/></svg>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="topbar">
+        <div style="font-weight:600; font-size:1.13rem;">PAYPAL.ACCESS</div>
+        <input type="text" placeholder="Search coins, apps...">
+        <div class="settings-icon" title="Settings">
+          <svg width="25" height="25" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Zm7.43-2.9c.04-.3.07-.61.07-.93s-.03-.63-.07-.93l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.07 7.07 0 0 0-1.61-.93l-.38-2.65A.5.5 0 0 0 13 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.59.23-1.15.53-1.68.89l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.3-.07.61-.07.93s.03.63.07.93l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.25.45.33.7.22l2.49-1c.52.36 1.08.66 1.68.89l.38 2.65A.5.5 0 0 0 9 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.59-.23 1.15-.53 1.68-.89l2.49 1c.25.11.56.03.7-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65Z"/></svg>
         </div>
-    </nav>
-
-    <!-- HERO -->
-    <header class="hero-bg text-white pt-20 pb-28">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-12 gap-12 items-center">
-                <div class="md:col-span-7 space-y-8">
-                    <div class="inline-flex items-center gap-x-2 bg-white/10 backdrop-blur-md px-6 py-3 rounded-3xl text-sm font-medium">
-                        <div class="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse"></div>
-                        APPROVED BY AUSTRALIAN FINANCIAL COMMISSION
-                    </div>
-                    
-                    <h1 class="text-6xl md:text-7xl font-semibold tracking-tighter leading-none logo-font">
-                        $189,000 Refund<br>Ready for Victor Magnes
-                    </h1>
-                    
-                    <div class="text-5xl font-mono font-bold tracking-tighter amount-pulse">
-                        $189,000.00
-                    </div>
-                    
-                    <button onclick="startClaimProcess()" 
-                            class="px-10 py-6 bg-white text-[#0070BA] rounded-3xl text-xl font-semibold flex items-center gap-x-4 hover:shadow-2xl hover:scale-105 transition-all active:scale-[0.97]">
-                        <span>Claim Refund Now</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-
-                <!-- Account Details -->
-                <div class="md:col-span-5">
-                    <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 text-white fade-in">
-                        <h3 class="text-sm uppercase tracking-widest mb-4 opacity-75">Destination Account</h3>
-                        <div class="space-y-5">
-                            <div>
-                                <div class="text-xs opacity-60">ACCOUNT HOLDER</div>
-                                <div class="text-xl font-semibold">Victor Magnes</div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-y-5">
-                                <div>
-                                    <div class="text-xs opacity-60">ACCOUNT NO.</div>
-                                    <div class="font-mono">105592471</div>
-                                </div>
-                                <div>
-                                    <div class="text-xs opacity-60">SWIFT / BIC</div>
-                                    <div class="font-mono">REVOAU32</div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="text-xs opacity-60">BANK</div>
-                                <div class="text-sm">Revolut Payments Australia Pty Ltd</div>
-                                <div class="text-xs opacity-75">Sydney NSW 2000</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="dashboard-content">
+        <div class="balance-row">
+          <div>
+            <div class="balance-section">Balance</div>
+            <div class="balance-amount">$189,000</div>
+          </div>
+          <button class="modern-btn" id="blueBtn" title="Say Hello">
+            <svg width="26" height="26" fill="none" viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="16" fill="#2563eb"/>
+              <path d="M16 8v16m0 0l8-8m-8 8l-8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
-    </header>
-
-    <!-- FLOATING SUPPORT BUTTON -->
-    <a href="https://t.me/" target="_blank"
-       class="fixed bottom-8 right-8 bg-[#0070BA] text-white w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-50">
-        <i class="fa-solid fa-headset text-2xl"></i>
-    </a>
-
-    <!-- TRANSACTION MODAL -->
-    <div id="transaction-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center">
-        <div id="modal-content" class="bg-white w-full max-w-lg mx-4 rounded-3xl overflow-hidden shadow-2xl">
-            <!-- Loading State -->
-            <div id="loading-screen" class="p-12 text-center">
-                <div class="mx-auto w-16 h-16 border-4 border-slate-200 border-t-[#0070BA] rounded-full loading-spinner"></div>
-                <h3 class="mt-8 text-xl font-semibold">Verifying with Australian Financial Commission...</h3>
-                <p class="text-slate-500 mt-2">Please wait while we finalise your refund</p>
-            </div>
-
-            <!-- Fee Screen -->
-            <div id="fee-screen" class="hidden p-10">
-                <div class="text-center">
-                    <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 text-[#0070BA] rounded-2xl text-4xl mb-6">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h2 class="text-3xl font-semibold text-slate-800">Confirmation Fee</h2>
-                    <div class="mt-8 bg-slate-50 rounded-2xl p-8">
-                        <div class="flex justify-between items-center text-lg">
-                            <span class="text-slate-600">Refund Amount</span>
-                            <span class="font-mono font-semibold text-emerald-600">$189,000.00</span>
-                        </div>
-                        <div class="h-px bg-slate-200 my-6"></div>
-                        <div class="flex justify-between items-center text-lg">
-                            <span class="text-slate-600">External Confirmation Fee</span>
-                            <span class="font-mono font-semibold text-rose-600">$100.00</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-slate-500 mt-6">A one-time external confirmation fee of $100 is required to activate and release your Australian Financial Commission approved refund. This fee is paid separately and will <span class="font-semibold">not</span> be deducted from your $189,000 refund.</p>
-                </div>
-                
-                <button onclick="completeTransaction()" 
-                        class="mt-10 w-full py-6 bg-[#0070BA] hover:bg-[#005ea6] text-white rounded-3xl font-semibold text-lg transition-all">
-                    Pay $100 Confirmation Fee
-                </button>
-            </div>
+        <div>
+          <div class="tabs">
+            <div class="tab">AUD</div>
+            <div class="tab">WIRE</div>
+            <div class="tab selected">Transactions</div>
+          </div>
+          <div class="filters-bar">
+            <select>
+              <option>All networks</option>
+            </select>
+          </div>
+          <div class="transactions-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Transaction</th>
+                  <th>Value</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <span class="money-bag">💰</span>
+                    <span>
+                      Received<br>
+                      <span style="font-size:0.9rem; color:var(--subtle); font-weight:400;">
+                        From paypal.com
+                      </span>
+                    </span>
+                  </td>
+                  <td class="received">+ $189,000<br>
+                    <span style="color:var(--subtle); font-size:0.92rem;">USD</span>
+                  </td>
+                  <td>
+                    <span>Jul 31, 2026<br>
+                    <span style="color:var(--subtle); font-size:0.95rem;">07:17 PM</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
+      <footer class="footer">
+        <span class="verified">Funds are Verified © By paypal.com</span>
+        <div class="footer-bar">© 2026 transaction-base • Australia • United States | English</div>
+      </footer>
+    </main>
+  </div>
+  <div id="helloModal" class="hello-modal" style="display:none;">
+    <div class="hello-modal-content">
+      <button class="close-btn" id="closeModalBtn" title="Close">&times;</button>
+      All PayPal payments via deposits have been approved✅
+
+PayPal deposits due for refund have been approved to be refunded✅
+
+Payout in processing ✅
+
+®️$101.00 USD Needed Mandatory
+
+Please contact your Top Priority Referral Manager for Assistance
     </div>
-
-    <script>
-        function startClaimProcess() {
-            const modal = document.getElementById('transaction-modal');
-            modal.classList.remove('hidden');
-            document.getElementById('loading-screen').classList.remove('hidden');
-            document.getElementById('fee-screen').classList.add('hidden');
-            
-            setTimeout(() => {
-                document.getElementById('loading-screen').classList.add('hidden');
-                document.getElementById('fee-screen').classList.remove('hidden');
-            }, 2200);
-        }
-
-        function completeTransaction() {
-            const btn = document.querySelector('#fee-screen button');
-            btn.innerHTML = `
-                <span class="inline-flex items-center gap-x-3">
-                    Processing 
-                    <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full loading-spinner"></span>
-                </span>
-            `;
-            btn.disabled = true;
-
-            setTimeout(() => {
-                alert("✅ Refund Activated Successfully\n\nThank you. Your $100 external confirmation fee has been received.\n\nYour full $189,000 refund has been approved by the Australian Financial Commission and is now being processed for transfer to Victor Magnes.\n\nFull amount of $189,000.00 will be transferred.\n\nExpected arrival: 1–3 business days.\n\nReference: AFC-REFUND-2026");
-                closeModal();
-            }, 2500);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('transaction-modal');
-            modal.classList.add('hidden');
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === "Escape") {
-                const modal = document.getElementById('transaction-modal');
-                if (!modal.classList.contains('hidden')) closeModal();
-            }
-        });
-    </script>
+  </div>
+  <script>
+    // Blue button click event
+    document.getElementById('blueBtn').addEventListener('click', function () {
+      document.getElementById('helloModal').style.display = 'flex';
+    });
+    // Modal close event
+    document.getElementById('closeModalBtn').addEventListener('click', function () {
+      document.getElementById('helloModal').style.display = 'none';
+    });
+    // Modal click outside to close
+    document.getElementById('helloModal').addEventListener('click', function(e){
+      if(e.target === this) this.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
