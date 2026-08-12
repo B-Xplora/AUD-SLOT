@@ -2,457 +2,618 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>R New</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap" rel="stylesheet">
+  <title>Revolut — Payment Verification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --background: #191b1f;
-      --sidebar: #181a20;
-      --primary: #0052ff;
-      --primary-light: #2563eb;
-      --text: #f5f6fa;
-      --subtle: #a0a4ad;
-      --accent: #0f1116;
-      --card: #23272f;
-      --green: #22c55e;
-      --blue: #2147ff;
-      --shadow: 0 4px 28px 0 rgba(0,0,0,0.16);
+      --purple: #7B61FF;
+      --purple-dark: #5A3FD6;
+      --black: #0B0B0F;
+      --dark: #16161D;
+      --gray: #8B8B9E;
+      --white: #FFFFFF;
+      --green: #00D4AA;
     }
-    * { box-sizing: border-box; }
-    body {
+
+    * {
       margin: 0;
-      background: var(--background);
-      color: var(--text);
-      font-family: 'Inter', Arial, sans-serif;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .container {
-      display: flex;
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--black);
+      color: var(--white);
+      line-height: 1.5;
       min-height: 100vh;
     }
-    .sidebar {
-      width: 80px;
-      background: var(--sidebar);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 24px 0;
-      gap: 30px;
-    }
-    .sidebar-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--accent);
+
+    /* Header */
+    .header {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
+      padding: 24px 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .sidebar-icon.selected {
-      background: var(--primary);
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
     }
-    .sidebar-icon svg {
-      fill: var(--text);
-      width: 24px; height: 24px;
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #7B61FF, #00D4AA);
+      border-radius: 9px;
     }
+
+    /* Main */
     .main {
-      flex: 1;
-      background: var(--background);
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 212, 170, 0.12);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: 17px;
+      color: var(--gray);
+      max-width: 460px;
+      margin: 0 auto 36px;
+    }
+
+    /* Circular image upload placeholder */
+    .upload-area {
+      margin: 0 auto 40px;
+      position: relative;
+      width: 140px;
+      height: 140px;
+    }
+
+    .upload-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px dashed rgba(123, 97, 255, 0.5);
+      background: rgba(123, 97, 255, 0.08);
       display: flex;
       flex-direction: column;
-      min-width: 0;
-    }
-    .topbar {
-      display: flex;
       align-items: center;
-      padding: 24px 32px 0 32px;
-      gap: 18px;
-    }
-    .topbar input {
-      background: var(--card);
-      border: none;
-      color: var(--text);
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 1rem;
-      flex: 1;
-      margin-left: 12px;
-      outline: none;
-    }
-    .topbar .settings-icon {
-      margin-left: 16px;
+      justify-content: center;
       cursor: pointer;
+      transition: all 0.25s ease;
+      overflow: hidden;
+      position: relative;
     }
-    .dashboard-content {
-      padding: 32px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-      min-width: 0;
+
+    .upload-circle:hover {
+      border-color: var(--purple);
+      background: rgba(123, 97, 255, 0.15);
+      transform: scale(1.03);
     }
-    .balance-row {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      justify-content: space-between;
-      flex-wrap: wrap;
+
+    .upload-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: none;
     }
-    .balance-section {
-      font-size: 2.1rem;
-      font-weight: 700;
+
+    .upload-circle.has-image img {
+      display: block;
+    }
+
+    .upload-circle.has-image .upload-placeholder {
+      display: none;
+    }
+
+    .upload-placeholder {
+      text-align: center;
+      color: var(--gray);
+      pointer-events: none;
+    }
+
+    .upload-placeholder svg {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 8px;
+      opacity: 0.7;
+    }
+
+    .upload-placeholder span {
+      font-size: 12px;
+      font-weight: 500;
+      display: block;
+    }
+
+    #logoInput {
+      display: none;
+    }
+
+    /* Outstanding due card */
+    .due-card {
+      background: var(--dark);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .due-label {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .due-amount {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: #FF6B6B;
       margin-bottom: 6px;
     }
-    .balance-amount {
-      font-size: 2.7rem;
-      font-weight: 700;
-      margin-bottom: 2px;
-      color: var(--text);
-      letter-spacing: -1.5px;
+
+    .due-note {
+      font-size: 13px;
+      color: var(--gray);
     }
-    .modern-btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      display: flex;
+
+    .btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow);
-      font-size: 1.7rem;
+      gap: 10px;
+      padding: 16px 36px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.18s, transform 0.11s;
-      outline: none;
-      margin-left: 18px;
-      position: relative;
+      border: none;
+      background: var(--purple);
+      color: white;
+      transition: all 0.25s ease;
     }
-    .modern-btn:active {
-      background: var(--primary-light);
-      transform: scale(0.96);
+
+    .btn:hover {
+      background: var(--purple-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(123, 97, 255, 0.35);
     }
-    .hello-modal {
-      position: fixed;
-      z-index: 999;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(20,22,30,0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeIn 190ms;
+
+    .btn svg {
+      width: 20px;
+      height: 20px;
     }
+
+    /* Email section */
+    #emailSection {
+      display: none;
+      max-width: 720px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+      animation: fadeIn 0.5s ease;
+    }
+
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .hello-modal-content {
-      background: var(--card);
-      color: var(--text);
-      padding: 44px 44px 32px 44px;
+
+    .email-wrapper {
+      background: #1A1A22;
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 16px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      min-width: 260px;
-      font-size: 1.22rem;
-      font-weight: 500;
-      position: relative;
-      animation: scaleIn 180ms;
-    }
-    @keyframes scaleIn {
-      from { transform: scale(0.8);}
-      to   { transform: scale(1);}
-    }
-    .close-btn {
-      background: none;
-      border: none;
-      color: var(--subtle);
-      position: absolute;
-      top: 12px; right: 16px;
-      font-size: 1.6rem;
-      cursor: pointer;
-      transition: color 0.16s;
-      outline: none;
-    }
-    .close-btn:hover { color: var(--blue);}
-    .tabs {
-      display: flex;
-      gap: 36px;
-      margin-bottom: 10px;
-      margin-top: 12px;
-    }
-    .tab {
-      color: var(--subtle);
-      font-weight: 500;
-      cursor: pointer;
-      padding-bottom: 6px;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s, border 0.2s;
-      font-size: 1.07rem;
-      letter-spacing: -.4px;
-    }
-    .tab.selected {
-      color: var(--primary);
-      border-bottom: 2px solid var(--primary);
-    }
-    .filters-bar {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 12px;
-    }
-    .filters-bar select {
-      background: var(--card);
-      color: var(--text);
-      border: none;
-      padding: 7px 12px;
-      border-radius: 7px;
-      font-size: 1rem;
-      outline: none;
-    }
-    .transactions-table {
-      width: 100%;
-      background: var(--card);
-      border-radius: 12px;
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.4);
     }
-    .transactions-table table {
-      width: 100%;
-      border-collapse: collapse;
+
+    .email-topbar {
+      background: #121218;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 13px;
+      color: var(--gray);
     }
-    .transactions-table th, .transactions-table td {
-      padding: 20px 18px;
-      text-align: left;
+
+    .email-topbar .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FF5F57;
     }
-    .transactions-table th {
-      color: var(--subtle);
+    .email-topbar .dot:nth-child(2) { background: #FEBC2E; }
+    .email-topbar .dot:nth-child(3) { background: #28C840; }
+
+    .email-body {
+      background: #FFFFFF;
+      color: #1A1A1A;
+    }
+
+    .email-header {
+      background: linear-gradient(135deg, #7B61FF 0%, #5A3FD6 100%);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .email-logo {
+      width: 42px;
+      height: 42px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .email-logo-inner {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #7B61FF, #00D4AA);
+      border-radius: 6px;
+    }
+
+    .email-brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    .email-meta {
+      padding: 24px 40px 16px;
+      border-bottom: 1px solid #EEE;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .email-meta strong {
+      color: #111;
+    }
+
+    .email-content {
+      padding: 36px 40px 48px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #222;
+    }
+
+    .email-content h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #111;
+    }
+
+    .transaction-box {
+      background: #F8F8FA;
+      border: 1px solid #E5E5EA;
+      border-radius: 12px;
+      padding: 28px;
+      margin: 24px 0;
+    }
+
+    .transaction-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #EAEAEA;
+      font-size: 14px;
+    }
+
+    .transaction-row:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-row .label {
+      color: #666;
       font-weight: 500;
-      background: var(--card);
-      font-size: 1rem;
-      border-bottom: 1px solid #232323;
-      letter-spacing: .2px;
     }
-    .transactions-table td {
-      font-size: 1.08rem;
+
+    .transaction-row .value {
+      color: #111;
+      font-weight: 600;
+      text-align: right;
     }
-    .transactions-table tr:not(:last-child) td {
-      border-bottom: 1px solid #22252b;
-    }
-    .money-bag {
-      font-size: 1.5rem;
-      margin-right: 13px;
-      vertical-align: middle;
-    }
-    .received {
-      color: var(--green);
-      font-weight: 500;
-    }
-    .footer {
+
+    .amount-highlight {
+      font-size: 28px;
+      font-weight: 800;
+      color: #FF6B6B;
       text-align: center;
-      color: var(--subtle);
-      font-size: 1rem;
-      padding: 20px 0 10px 0;
-      background: none;
+      margin: 8px 0 20px;
     }
-    .verified {
-      color: var(--blue);
-      font-size: 1.04rem;
+
+    .status-badge {
+      display: inline-block;
+      background: rgba(255, 107, 107, 0.12);
+      color: #FF6B6B;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 100px;
       margin-bottom: 8px;
-      display: inline-block;
     }
-    .footer-bar {
-      background: var(--accent);
-      color: var(--text);
-      font-size: 0.98rem;
-      padding: 6px 0;
-      border-radius: 8px;
-      display: inline-block;
-      margin-top: 6px;
-      min-width: 320px;
+
+    .pay-to-box {
+      background: #F0F4FF;
+      border: 1px solid #D0D8FF;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 24px;
     }
-    /* Responsive styling */
-    @media (max-width: 900px) {
-      .dashboard-content { padding: 14px; }
-      .topbar { padding: 14px 12px 0 12px;}
-      .footer-bar { min-width: 190px; }
+
+    .pay-to-box h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #5A3FD6;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
+
+    .email-footer {
+      padding: 24px 40px;
+      background: #F5F5F7;
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      border-top: 1px solid #EEE;
+    }
+
+    .success-banner {
+      display: none;
+      background: rgba(0, 212, 170, 0.1);
+      border: 1px solid rgba(0, 212, 170, 0.3);
+      color: var(--green);
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
     @media (max-width: 600px) {
-      .sidebar { width: 56px; }
-      .dashboard-content { padding: 6px; }
-      .topbar { padding: 6px 6px 0 6px;}
-      .hello-modal-content { min-width: 120px; padding: 22px 12px 19px 12px;}
+      .email-header,
+      .email-meta,
+      .email-content,
+      .email-footer {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+      .transaction-box {
+        padding: 20px;
+      }
+      .transaction-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+      .transaction-row .value {
+        text-align: left;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <div class="sidebar-icon selected" title="Dashboard">
-        <!-- Home Icon -->
-        <svg viewBox="0 0 24 24"><path d="M3 10.8V21h6v-5h6v5h6V10.8L12 3z"/></svg>
-      </div>
-      <div class="sidebar-icon" title="Night Mode">
-        <!-- Moon Icon -->
-        <svg viewBox="0 0 24 24"><path d="M20.742 13.045A8.088 8.088 0 0 1 11.955 3.258a8.093 8.093 0 1 0 8.787 9.787z"/></svg>
-      </div>
-      <div style="flex:1"></div>
-      <div class="sidebar-icon" title="Plus">
-        <svg viewBox="0 0 24 24"><path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"/></svg>
-      </div>
-      <div class="sidebar-icon" title="Refresh">
-        <svg viewBox="0 0 24 24"><path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5a5 5 0 0 1-5 5c-2.21 0-4.07-1.44-4.74-3.43l-1.92.51A7.002 7.002 0 0 0 19 13c0-3.87-3.13-7-7-7z"/></svg>
-      </div>
-      <div class="sidebar-icon" title="Download">
-        <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-6h-4V4H9v8H5l7 7 7-7z"/></svg>
-      </div>
-    </aside>
-    <main class="main">
-      <div class="topbar">
-        <div style="font-weight:600; font-size:1.13rem;">PAYPAL.ACCESS</div>
-        <input type="text" placeholder="Search coins, apps...">
-        <div class="settings-icon" title="Settings">
-          <svg width="25" height="25" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Zm7.43-2.9c.04-.3.07-.61.07-.93s-.03-.63-.07-.93l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.6-.22l-2.49 1a7.07 7.07 0 0 0-1.61-.93l-.38-2.65A.5.5 0 0 0 13 2h-4a.5.5 0 0 0-.5.42l-.38 2.65c-.59.23-1.15.53-1.68.89l-2.49-1a.5.5 0 0 0-.6.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.65c-.04.3-.07.61-.07.93s.03.63.07.93l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.25.45.33.7.22l2.49-1c.52.36 1.08.66 1.68.89l.38 2.65A.5.5 0 0 0 9 22h4a.5.5 0 0 0 .5-.42l.38-2.65c.59-.23 1.15-.53 1.68-.89l2.49 1c.25.11.56.03.7-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65Z"/></svg>
-        </div>
-      </div>
-      <div class="dashboard-content">
-        <div class="balance-row">
-          <div>
-            <div class="balance-section">Balance</div>
-            <div class="balance-amount">$189,000</div>
-          </div>
-          <button class="modern-btn" id="blueBtn" title="Say Hello">
-            <svg width="26" height="26" fill="none" viewBox="0 0 32 32">
-              <circle cx="16" cy="16" r="16" fill="#2563eb"/>
-              <path d="M16 8v16m0 0l8-8m-8 8l-8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <div>
-          <div class="tabs">
-            <div class="tab">AUD</div>
-            <div class="tab">WIRE</div>
-            <div class="tab selected">Transactions</div>
-          </div>
-          <div class="filters-bar">
-            <select>
-              <option>All networks</option>
-            </select>
-          </div>
-          <div class="transactions-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Transaction</th>
-                  <th>Value</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <span class="money-bag">💰</span>
-                    <span>
-                      Received<br>
-                      <span style="font-size:0.9rem; color:var(--subtle); font-weight:400;">
-                        From paypal.com
-                      </span>
-                    </span>
-                  </td>
-                  <td class="received">+ $189,000<br>
-                    <span style="color:var(--subtle); font-size:0.92rem;">USD</span>
-                  </td>
-                  <td>
-                    <span>Jul 31, 2026<br>
-                    <span style="color:var(--subtle); font-size:0.95rem;">07:17 PM</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <footer class="footer">
-        <span class="verified">Funds are Verified © By paypal.com</span>
-        <div class="footer-bar">© 2026 transaction-base • Australia • United States | English</div>
-      </footer>
-    </main>
-  </div>
-  <div id="helloModal" class="hello-modal" style="display:none;">
-    <div class="hello-modal-content">
-      <button class="close-btn" id="closeModalBtn" title="Close">&times;</button>
-      All PayPal payments via deposits have been approved✅
 
-PayPal deposits due for refund have been approved to be refunded✅
-
-Payout in processing ✅
-
-®️$101.00 USD Needed Mandatory
-
-Please contact your Top Priority Referral Manager for Assistance
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon"></div>
+      Revolut
     </div>
-  </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="main" id="mainSection">
+    <div class="badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Secure Payment Verification
+    </div>
+
+    <h1>Outstanding Payment Due</h1>
+    <p class="subtitle">
+      Please review the outstanding balance and upload your logo watermark before proceeding.
+    </p>
+
+    <!-- Circular logo upload placeholder -->
+    <div class="upload-area">
+      <label class="upload-circle" id="uploadCircle" for="logoInput">
+        <img id="previewImage" alt="Logo preview">
+        <div class="upload-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Upload Logo</span>
+          <span style="font-size:11px; opacity:0.7;">Watermark</span>
+        </div>
+      </label>
+      <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(event)">
+    </div>
+
+    <!-- Outstanding Due -->
+    <div class="due-card">
+      <div class="due-label">Outstanding Due</div>
+      <div class="due-amount">$7,890.00</div>
+      <div class="due-note">Immediate settlement required</div>
+    </div>
+
+    <button class="btn" onclick="showEmail()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      Check Payment SMS
+    </button>
+  </main>
+
+  <!-- Email display -->
+  <section id="emailSection">
+    <div class="success-banner" id="successBanner">
+      ✓ Official payment notification retrieved successfully
+    </div>
+
+    <div class="email-wrapper">
+      <div class="email-topbar">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <span style="margin-left: 8px;">Revolut Bank UAB — Payment Notification</span>
+      </div>
+
+      <div class="email-body">
+        <div class="email-header">
+          <div class="email-logo">
+            <div class="email-logo-inner"></div>
+          </div>
+          <div class="email-brand">Revolut</div>
+        </div>
+
+        <div class="email-meta">
+          <div><strong>From:</strong> notifications@revolut.com</div>
+          <div style="margin-top: 6px;"><strong>Subject:</strong> Outstanding Payment Due — $7,890.00</div>
+          <div style="margin-top: 6px;"><strong>Date:</strong> 12 August 2026</div>
+        </div>
+
+        <div class="email-content">
+          <h2>Payment Transaction Notice</h2>
+          <p>Dear Customer,</p>
+          <p>An outstanding balance has been recorded on your account. Please settle the amount using the payment details below.</p>
+
+          <div class="transaction-box">
+            <div style="text-align: center;">
+              <div class="status-badge">OUTSTANDING</div>
+              <div class="amount-highlight">$7,890.00</div>
+            </div>
+
+            <div class="transaction-row">
+              <span class="label">Previous Transaction</span>
+              <span class="value">$247,000.00</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Beneficiary Name</span>
+              <span class="value">VICTOR MAGNES</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Account Number</span>
+              <span class="value">1283597861</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Bank</span>
+              <span class="value">REVOLUT</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Outstanding Due</span>
+              <span class="value" style="color:#FF6B6B;">$7,890.00 USD</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Status</span>
+              <span class="value" style="color:#FF6B6B;">Payment Required</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Date & Time</span>
+              <span class="value">12 August 2026 · 14:11 UTC</span>
+            </div>
+          </div>
+
+          <!-- Pay To Details -->
+          <div class="pay-to-box">
+            <h3>Pay To</h3>
+            <div class="transaction-row">
+              <span class="label">Name</span>
+              <span class="value">John Fernandez</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Platform</span>
+              <span class="value">Cash App</span>
+            </div>
+            <div class="transaction-row">
+              <span class="label">Business</span>
+              <span class="value">Elite Fx Trades</span>
+            </div>
+          </div>
+
+          <p style="margin-top: 28px;">Please complete the payment of the outstanding amount at your earliest convenience.</p>
+          <p style="margin-top: 8px;">This is an automated notification. Please do not reply to this message.</p>
+          <p style="margin-top: 16px;">Kind regards,<br><strong>Revolut Bank UAB</strong></p>
+        </div>
+
+        <div class="email-footer">
+          Revolut Bank UAB · Konstitucijos Ave. 21B, 08130 Vilnius, Lithuania<br>
+          Licensed by the Bank of Lithuania
+        </div>
+      </div>
+    </div>
+  </section>
+
   <script>
-    // Blue button click event
-    document.getElementById('blueBtn').addEventListener('click', function () {
-      document.getElementById('helloModal').style.display = 'flex';
-    });
-    // Modal close event
-    document.getElementById('closeModalBtn').addEventListener('click', function () {
-      document.getElementById('helloModal').style.display = 'none';
-    });
-    // Modal click outside to close
-    document.getElementById('helloModal').addEventListener('click', function(e){
-      if(e.target === this) this.style.display = 'none';
-    });
-  </script> 
-
-  <!-- Floating Customer Support Button -->
-<a href="https://services.zangi.com/dl/conversation/6652806670"
-   target="_blank"
-   class="support-btn">
-    💬 Customer Support
-</a>
-
-<style>
-.support-btn{
-    position:fixed;
-    right:20px;
-    top:50%;
-    transform:translateY(-50%);
-    background:#007BFF;
-    color:#fff;
-    text-decoration:none;
-    padding:14px 22px;
-    border-radius:50px;
-    font:600 15px Arial, sans-serif;
-    box-shadow:0 8px 20px rgba(0,123,255,.35);
-    z-index:999999;
-    transition:all .3s ease;
-}
-
-.support-btn:hover{
-    background:#0056d6;
-    transform:translateY(-50%) scale(1.05);
-}
-
-@media (max-width:768px){
-    .support-btn{
-        top:auto;
-        bottom:20px;
-        right:15px;
-        transform:none;
+    function previewLogo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById('previewImage');
+          img.src = e.target.result;
+          document.getElementById('uploadCircle').classList.add('has-image');
+        }
+        reader.readAsDataURL(file);
+      }
     }
 
-    .support-btn:hover{
-        transform:scale(1.05);
+    function showEmail() {
+      document.getElementById('mainSection').style.display = 'none';
+      const emailSection = document.getElementById('emailSection');
+      emailSection.style.display = 'block';
+      document.getElementById('successBanner').style.display = 'block';
+      emailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-}
-</style>
-  
+  </script>
+
 </body>
 </html>
