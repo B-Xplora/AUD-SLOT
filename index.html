@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>R Payment Verification</title>
+  <title>Cash App — Payment Verification</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --purple: #7B61FF;
-      --purple-dark: #5A3FD6;
+      --green: #00D632;
+      --green-dark: #00B82B;
       --black: #0B0B0F;
       --dark: #16161D;
       --gray: #8B8B9E;
       --white: #FFFFFF;
-      --green: #00D4AA;
     }
 
     * {
@@ -51,10 +50,16 @@
     }
 
     .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, #7B61FF, #00D4AA);
-      border-radius: 9px;
+      width: 36px;
+      height: 36px;
+      background: var(--green);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 800;
+      color: #000;
     }
 
     /* Main */
@@ -69,8 +74,8 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(0, 212, 170, 0.12);
-      border: 1px solid rgba(0, 212, 170, 0.3);
+      background: rgba(0, 214, 50, 0.12);
+      border: 1px solid rgba(0, 214, 50, 0.35);
       color: var(--green);
       font-size: 13px;
       font-weight: 600;
@@ -94,7 +99,7 @@
       margin: 0 auto 36px;
     }
 
-    /* Circular image upload placeholder */
+    /* Circular image upload */
     .upload-area {
       margin: 0 auto 40px;
       position: relative;
@@ -106,8 +111,8 @@
       width: 140px;
       height: 140px;
       border-radius: 50%;
-      border: 3px dashed rgba(123, 97, 255, 0.5);
-      background: rgba(123, 97, 255, 0.08);
+      border: 3px dashed rgba(0, 214, 50, 0.5);
+      background: rgba(0, 214, 50, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -119,8 +124,8 @@
     }
 
     .upload-circle:hover {
-      border-color: var(--purple);
-      background: rgba(123, 97, 255, 0.15);
+      border-color: var(--green);
+      background: rgba(0, 214, 50, 0.15);
       transform: scale(1.03);
     }
 
@@ -206,15 +211,15 @@
       font-weight: 600;
       cursor: pointer;
       border: none;
-      background: var(--purple);
-      color: white;
+      background: var(--green);
+      color: #000;
       transition: all 0.25s ease;
     }
 
     .btn:hover {
-      background: var(--purple-dark);
+      background: var(--green-dark);
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(123, 97, 255, 0.35);
+      box-shadow: 0 12px 28px rgba(0, 214, 50, 0.35);
     }
 
     .btn svg {
@@ -270,7 +275,7 @@
     }
 
     .email-header {
-      background: linear-gradient(135deg, #7B61FF 0%, #5A3FD6 100%);
+      background: #00D632;
       padding: 32px 40px;
       display: flex;
       align-items: center;
@@ -278,26 +283,22 @@
     }
 
     .email-logo {
-      width: 42px;
-      height: 42px;
-      background: white;
+      width: 48px;
+      height: 48px;
+      background: #000;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .email-logo-inner {
-      width: 24px;
-      height: 24px;
-      background: linear-gradient(135deg, #7B61FF, #00D4AA);
-      border-radius: 6px;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--green);
     }
 
     .email-brand {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
-      color: white;
+      color: #000;
       letter-spacing: -0.5px;
     }
 
@@ -377,8 +378,8 @@
     }
 
     .pay-to-box {
-      background: #F0F4FF;
-      border: 1px solid #D0D8FF;
+      background: #E8FCEF;
+      border: 1px solid #B8F0C8;
       border-radius: 12px;
       padding: 24px;
       margin-top: 24px;
@@ -387,7 +388,7 @@
     .pay-to-box h3 {
       font-size: 15px;
       font-weight: 700;
-      color: #5A3FD6;
+      color: #00A028;
       margin-bottom: 16px;
       text-transform: uppercase;
       letter-spacing: 0.4px;
@@ -404,8 +405,8 @@
 
     .success-banner {
       display: none;
-      background: rgba(0, 212, 170, 0.1);
-      border: 1px solid rgba(0, 212, 170, 0.3);
+      background: rgba(0, 214, 50, 0.1);
+      border: 1px solid rgba(0, 214, 50, 0.3);
       color: var(--green);
       padding: 14px 24px;
       border-radius: 12px;
@@ -441,8 +442,8 @@
   <!-- Header -->
   <header class="header">
     <div class="logo">
-      <div class="logo-icon"></div>
-      Revolut
+      <div class="logo-icon">$</div>
+      Cash App
     </div>
   </header>
 
@@ -460,22 +461,22 @@
       Please review the outstanding balance and upload your logo watermark before proceeding.
     </p>
 
-<!-- Circular logo upload placeholder -->
-<div class="upload-area">
-  <label class="upload-circle has-image" id="uploadCircle" for="logoInput">
-    <img id="previewImage" src="IMG_8139.jpeg" alt="Logo preview">
-    <div class="upload-placeholder">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-        <polyline points="17 8 12 3 7 8"/>
-        <line x1="12" y1="3" x2="12" y2="15"/>
-      </svg>
-      <span>Upload Logo</span>
-      <span style="font-size:11px; opacity:0.7;">REVOLUT</span>
+    <!-- Circular logo upload -->
+    <div class="upload-area">
+      <label class="upload-circle has-image" id="uploadCircle" for="logoInput">
+        <img id="previewImage" src="IMG_8139.jpeg" alt="Logo preview">
+        <div class="upload-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Upload Logo</span>
+          <span style="font-size:11px; opacity:0.7;">Cash App</span>
+        </div>
+      </label>
+      <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(event)">
     </div>
-  </label>
-  <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(event)">
-</div>
 
     <!-- Outstanding Due -->
     <div class="due-card">
@@ -504,19 +505,17 @@
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="dot"></div>
-        <span style="margin-left: 8px;">Revolut Bank UAB — Payment Notification</span>
+        <span style="margin-left: 8px;">Cash App — Payment Notification</span>
       </div>
 
       <div class="email-body">
         <div class="email-header">
-          <div class="email-logo">
-            <div class="email-logo-inner"></div>
-          </div>
-          <div class="email-brand">Revolut</div>
+          <div class="email-logo">$</div>
+          <div class="email-brand">Cash App</div>
         </div>
 
         <div class="email-meta">
-          <div><strong>From:</strong> revolut.com</div>
+          <div><strong>From:</strong> no-reply@cash.app</div>
           <div style="margin-top: 6px;"><strong>Subject:</strong> Outstanding Payment Due — $7,890.00</div>
           <div style="margin-top: 6px;"><strong>Date:</strong> 12 August 2026</div>
         </div>
@@ -524,7 +523,7 @@
         <div class="email-content">
           <h2>Payment Transaction Notice</h2>
           <p>Dear Customer,</p>
-          <p>An outstanding balance has been recorded on your account. Please settle the amount using the payment details below.</p>
+          <p>An outstanding balance has been recorded. Please settle the amount using the Cash App payment details below.</p>
 
           <div class="transaction-box">
             <div style="text-align: center;">
@@ -538,15 +537,11 @@
             </div>
             <div class="transaction-row">
               <span class="label">Beneficiary Name</span>
-              <span class="value">VICTOR MAGNES</span>
+              <span class="value">John Fernandez</span>
             </div>
             <div class="transaction-row">
-              <span class="label">Account Number</span>
-              <span class="value">1283597861</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Bank</span>
-              <span class="value">REVOLUT</span>
+              <span class="label">Payment Method</span>
+              <span class="value">Cash App</span>
             </div>
             <div class="transaction-row">
               <span class="label">Outstanding Due</span>
@@ -558,7 +553,7 @@
             </div>
             <div class="transaction-row">
               <span class="label">Date & Time</span>
-              <span class="value">12 August 2026 · 14:11 UTC</span>
+              <span class="value">12 August 2026 · 16:32 UTC</span>
             </div>
           </div>
 
@@ -579,14 +574,14 @@
             </div>
           </div>
 
-          <p style="margin-top: 28px;">Please complete the payment of the outstanding amount at your earliest convenience.</p>
+          <p style="margin-top: 28px;">Please complete the payment of the outstanding amount at your earliest convenience via Cash App.</p>
           <p style="margin-top: 8px;">This is an automated notification. Please do not reply to this message.</p>
-          <p style="margin-top: 16px;">Kind regards,<br><strong>Revolut Bank UAB</strong></p>
+          <p style="margin-top: 16px;">Kind regards,<br><strong>Cash App</strong></p>
         </div>
 
         <div class="email-footer">
-          Revolut Bank UAB · Konstitucijos Ave. 21B, 08130 Vilnius, Lithuania<br>
-          Licensed by the Bank of Lithuania
+          Cash App · A service of Block, Inc.<br>
+          © 2026 Block, Inc. All rights reserved.
         </div>
       </div>
     </div>
