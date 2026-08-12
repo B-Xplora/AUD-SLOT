@@ -460,22 +460,22 @@
       Please review the outstanding balance and upload your logo watermark before proceeding.
     </p>
 
-    <!-- Circular logo upload placeholder -->
-    <div class="upload-area">
-      <label class="upload-circle" id="uploadCircle" for="logoInput">
-        <img id="IMG_8139.jpeg" alt="Logo preview">
-        <div class="upload-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          <span>Upload Logo</span>
-          <span style="font-size:11px; opacity:0.7;">Watermark</span>
-        </div>
-      </label>
-      <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(event)">
+<!-- Circular logo upload placeholder -->
+<div class="upload-area">
+  <label class="upload-circle has-image" id="uploadCircle" for="logoInput">
+    <img id="previewImage" src="IMG_8139.jpeg" alt="Logo preview">
+    <div class="upload-placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <span>Upload Logo</span>
+      <span style="font-size:11px; opacity:0.7;">REVOLUT</span>
     </div>
+  </label>
+  <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(event)">
+</div>
 
     <!-- Outstanding Due -->
     <div class="due-card">
