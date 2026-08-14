@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cash App — Payment Verification</title>
+  <title>PayPal — Access Funds</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --green: #00D632;
-      --green-dark: #00B82B;
+      --paypal-blue: #0070BA;
+      --paypal-dark: #003087;
+      --paypal-light: #009CDE;
       --black: #0B0B0F;
       --dark: #16161D;
       --gray: #8B8B9E;
@@ -31,105 +32,66 @@
       min-height: 100vh;
     }
 
-    /* Header */
     .header {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px 32px;
+      padding: 22px 32px;
       border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(180deg, rgba(0,112,186,0.12), transparent);
     }
 
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.5px;
+      color: #fff;
     }
 
     .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--green);
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--paypal-blue), var(--paypal-dark));
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 800;
-      color: #000;
+      color: white;
     }
 
-    /* Main */
-    .main {
-      max-width: 640px;
+    .container {
+      max-width: 520px;
       margin: 0 auto;
-      padding: 60px 24px 40px;
+      padding: 40px 24px 60px;
       text-align: center;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 214, 50, 0.12);
-      border: 1px solid rgba(0, 214, 50, 0.35);
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 100px;
-      margin-bottom: 28px;
+    /* Circular badge */
+    .badge-circle-area {
+      margin: 0 auto 28px;
+      width: 110px;
+      height: 110px;
     }
 
-    h1 {
-      font-size: clamp(28px, 5vw, 40px);
-      font-weight: 800;
-      letter-spacing: -1.2px;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
-
-    .subtitle {
-      font-size: 17px;
-      color: var(--gray);
-      max-width: 460px;
-      margin: 0 auto 36px;
-    }
-
-    /* Circular image upload */
-    .upload-area {
-      margin: 0 auto 40px;
-      position: relative;
-      width: 140px;
-      height: 140px;
-    }
-
-    .upload-circle {
-      width: 140px;
-      height: 140px;
+    .badge-circle {
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
-      border: 3px dashed rgba(0, 214, 50, 0.5);
-      background: rgba(0, 214, 50, 0.08);
+      border: 4px solid var(--paypal-blue);
+      background: rgba(0, 112, 186, 0.12);
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: all 0.25s ease;
       overflow: hidden;
-      position: relative;
+      box-shadow: 0 0 0 6px rgba(0, 112, 186, 0.15);
     }
 
-    .upload-circle:hover {
-      border-color: var(--green);
-      background: rgba(0, 214, 50, 0.15);
-      transform: scale(1.03);
-    }
-
-    .upload-circle img {
+    .badge-circle img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -137,67 +99,84 @@
       display: none;
     }
 
-    .upload-circle.has-image img {
+    .badge-circle.has-image img {
       display: block;
     }
 
-    .upload-circle.has-image .upload-placeholder {
-      display: none;
-    }
-
-    .upload-placeholder {
+    .badge-placeholder {
       text-align: center;
-      color: var(--gray);
-      pointer-events: none;
-    }
-
-    .upload-placeholder svg {
-      width: 36px;
-      height: 36px;
-      margin-bottom: 8px;
-      opacity: 0.7;
-    }
-
-    .upload-placeholder span {
-      font-size: 12px;
-      font-weight: 500;
-      display: block;
-    }
-
-    #logoInput {
-      display: none;
-    }
-
-    /* Outstanding due card */
-    .due-card {
-      background: var(--dark);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 36px;
-      text-align: center;
-    }
-
-    .due-label {
-      font-size: 14px;
-      color: var(--gray);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: var(--paypal-light);
+      font-size: 13px;
       font-weight: 600;
     }
 
-    .due-amount {
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 112, 186, 0.15);
+      border: 1px solid rgba(0, 156, 222, 0.4);
+      color: var(--paypal-light);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--gray);
+      margin-bottom: 28px;
+    }
+
+    .balance-card {
+      background: var(--dark);
+      border: 1px solid rgba(0, 112, 186, 0.25);
+      border-radius: 20px;
+      padding: 32px 24px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--paypal-dark), var(--paypal-blue), var(--paypal-light));
+    }
+
+    .balance-label {
+      font-size: 14px;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .balance-amount {
       font-size: 42px;
       font-weight: 800;
       letter-spacing: -1.5px;
-      color: #FF6B6B;
-      margin-bottom: 6px;
+      color: var(--paypal-light);
     }
 
-    .due-note {
-      font-size: 13px;
+    .name {
+      font-size: 15px;
       color: var(--gray);
+      margin-top: 10px;
     }
 
     .btn {
@@ -205,408 +184,257 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 16px 36px;
+      width: 100%;
+      max-width: 320px;
+      padding: 16px 28px;
       border-radius: 100px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      background: var(--green);
-      color: #000;
+      background: linear-gradient(135deg, var(--paypal-blue), var(--paypal-dark));
+      color: white;
       transition: all 0.25s ease;
     }
 
     .btn:hover {
-      background: var(--green-dark);
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(0, 214, 50, 0.35);
+      box-shadow: 0 12px 28px rgba(0, 112, 186, 0.4);
     }
 
-    .btn svg {
-      width: 20px;
-      height: 20px;
-    }
+    .section { display: none; }
+    .section.active { display: block; }
 
-    /* Email section */
-    #emailSection {
-      display: none;
-      max-width: 720px;
-      margin: 0 auto 80px;
-      padding: 0 20px;
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .email-wrapper {
-      background: #1A1A22;
-      border: 1px solid rgba(255,255,255,0.08);
+    /* Confirm card */
+    .confirm-card {
+      background: var(--dark);
+      border: 1px solid rgba(0, 112, 186, 0.25);
       border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+      padding: 28px 24px;
+      text-align: left;
+      margin-bottom: 28px;
     }
 
-    .email-topbar {
-      background: #121218;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 13px;
-      color: var(--gray);
-    }
-
-    .email-topbar .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #FF5F57;
-    }
-    .email-topbar .dot:nth-child(2) { background: #FEBC2E; }
-    .email-topbar .dot:nth-child(3) { background: #28C840; }
-
-    .email-body {
-      background: #FFFFFF;
-      color: #1A1A1A;
-    }
-
-    .email-header {
-      background: #00D632;
-      padding: 32px 40px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .email-logo {
-      width: 48px;
-      height: 48px;
-      background: #000;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--green);
-    }
-
-    .email-brand {
-      font-size: 24px;
-      font-weight: 800;
-      color: #000;
-      letter-spacing: -0.5px;
-    }
-
-    .email-meta {
-      padding: 24px 40px 16px;
-      border-bottom: 1px solid #EEE;
-      font-size: 14px;
-      color: #555;
-    }
-
-    .email-meta strong {
-      color: #111;
-    }
-
-    .email-content {
-      padding: 36px 40px 48px;
-      font-size: 15px;
-      line-height: 1.7;
-      color: #222;
-    }
-
-    .email-content h2 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: #111;
-    }
-
-    .transaction-box {
-      background: #F8F8FA;
-      border: 1px solid #E5E5EA;
-      border-radius: 12px;
-      padding: 28px;
-      margin: 24px 0;
-    }
-
-    .transaction-row {
+    .confirm-row {
       display: flex;
       justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid #EAEAEA;
-      font-size: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 15px;
     }
 
-    .transaction-row:last-child {
+    .confirm-row:last-child {
       border-bottom: none;
     }
 
-    .transaction-row .label {
-      color: #666;
-      font-weight: 500;
+    .confirm-row .label {
+      color: var(--gray);
     }
 
-    .transaction-row .value {
-      color: #111;
+    .confirm-row .value {
       font-weight: 600;
-      text-align: right;
+      color: white;
     }
 
-    .amount-highlight {
-      font-size: 28px;
+    /* PayPal Spinner */
+    .loader-wrap {
+      padding: 70px 20px;
+      text-align: center;
+    }
+
+    .paypal-spinner {
+      width: 64px;
+      height: 64px;
+      border: 5px solid rgba(0, 112, 186, 0.2);
+      border-top-color: var(--paypal-blue);
+      border-right-color: var(--paypal-light);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+      margin: 0 auto 28px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+      font-size: 16px;
+      color: var(--gray);
+    }
+
+    /* Transaction Preview */
+    .preview-box {
+      background: var(--dark);
+      border: 1px solid rgba(0, 112, 186, 0.3);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: left;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--paypal-dark), var(--paypal-blue), var(--paypal-light));
+    }
+
+    .preview-box h3 {
+      font-size: 18px;
+      margin-bottom: 18px;
+      color: var(--paypal-light);
+    }
+
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 14px;
+    }
+
+    .preview-row:last-child {
+      border-bottom: none;
+    }
+
+    .fee-highlight {
+      font-size: 32px;
       font-weight: 800;
       color: #FF6B6B;
       text-align: center;
-      margin: 8px 0 20px;
+      margin: 18px 0 8px;
     }
 
-    .status-badge {
-      display: inline-block;
-      background: rgba(255, 107, 107, 0.12);
-      color: #FF6B6B;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 5px 14px;
-      border-radius: 100px;
-      margin-bottom: 8px;
-    }
-
-    .pay-to-box {
-      background: #E8FCEF;
-      border: 1px solid #B8F0C8;
-      border-radius: 12px;
-      padding: 24px;
-      margin-top: 24px;
-    }
-
-    .pay-to-box h3 {
-      font-size: 15px;
-      font-weight: 700;
-      color: #00A028;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-    }
-
-    .email-footer {
-      padding: 24px 40px;
-      background: #F5F5F7;
-      font-size: 12px;
-      color: #888;
+    .fee-label {
       text-align: center;
-      border-top: 1px solid #EEE;
-    }
-
-    .success-banner {
-      display: none;
-      background: rgba(0, 214, 50, 0.1);
-      border: 1px solid rgba(0, 214, 50, 0.3);
-      color: var(--green);
-      padding: 14px 24px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 500;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-
-    @media (max-width: 600px) {
-      .email-header,
-      .email-meta,
-      .email-content,
-      .email-footer {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-      .transaction-box {
-        padding: 20px;
-      }
-      .transaction-row {
-        flex-direction: column;
-        gap: 4px;
-      }
-      .transaction-row .value {
-        text-align: left;
-      }
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <header class="header">
     <div class="logo">
-      <div class="logo-icon">$</div>
-      Cash App
+      <div class="logo-icon">PP</div>
+      PayPal
     </div>
   </header>
 
-  <!-- Main content -->
-  <main class="main" id="mainSection">
-    <div class="badge">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      </svg>
-      Secure Payment Verification
-    </div>
+  <div class="container">
 
-    <h1>Outstanding Payment Due</h1>
-    <p class="subtitle">
-      Please review the outstanding balance and upload your logo watermark before proceeding.
-    </p>
-
-    <!-- Circular logo upload -->
-    <div class="upload-area">
-      <label class="upload-circle has-image" id="uploadCircle" for="logoInput">
-        <img id="previewImage" src="IMG_8139.jpeg" alt="Logo preview">
-        <div class="upload-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/>
-            <line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          <span>Upload Logo</span>
-          <span style="font-size:11px; opacity:0.7;">Cash App</span>
+    <!-- STEP 1: Balance -->
+    <div id="step1" class="section active">
+      <!-- Circular badge -->
+      <div class="badge-circle-area">
+        <div class="badge-circle has-image" id="badgeCircle">
+          <img id="badgeImage" src="IMG_8148.jpeg" alt="Badge">
+          <div class="badge-placeholder">
+            <div>Badge</div>
+          </div>
         </div>
-      </label>
-      <input type="file" id="logoInput" accept="image/*" onchange="previewLogo(event)">
-    </div>
-
-    <!-- Outstanding Due -->
-    <div class="due-card">
-      <div class="due-label">Outstanding Due</div>
-      <div class="due-amount">$7,890.00</div>
-      <div class="due-note">Immediate settlement required</div>
-    </div>
-
-    <button class="btn" onclick="showEmail()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-        <polyline points="22,6 12,13 2,6"/>
-      </svg>
-      Check Payment SMS
-    </button>
-  </main>
-
-  <!-- Email display -->
-  <section id="emailSection">
-    <div class="success-banner" id="successBanner">
-      ✓ Official payment notification retrieved successfully
-    </div>
-
-    <div class="email-wrapper">
-      <div class="email-topbar">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <span style="margin-left: 8px;">Cash App — Payment Notification</span>
       </div>
 
-      <div class="email-body">
-        <div class="email-header">
-          <div class="email-logo">$</div>
-          <div class="email-brand">Cash App</div>
+      <div class="badge">Secure Verification</div>
+      <h1>Available Balance</h1>
+      <p class="subtitle">Access your funds to continue the transaction.</p>
+
+      <div class="balance-card">
+        <div class="balance-label">Total Balance</div>
+        <div class="balance-amount">$247,000.00</div>
+        <div class="name">Victor Magnes</div>
+      </div>
+
+      <button class="btn" onclick="goToStep(2)">Access Funds</button>
+    </div>
+
+    <!-- STEP 2: Confirm Receiving Account -->
+    <div id="step2" class="section">
+      <div class="badge">Confirm Account</div>
+      <h1>Confirm Receiving Account</h1>
+      <p class="subtitle">Please verify the destination account details before proceeding.</p>
+
+      <div class="confirm-card">
+        <div class="confirm-row">
+          <span class="label">Beneficiary</span>
+          <span class="value">Victor Magnes</span>
         </div>
-
-        <div class="email-meta">
-          <div><strong>From:</strong> cash.app</div>
-          <div style="margin-top: 6px;"><strong>Subject:</strong> Outstanding Payment Due — $7,890.00</div>
-          <div style="margin-top: 6px;"><strong>Date:</strong> 12 August 2026</div>
+        <div class="confirm-row">
+          <span class="label">Account Number</span>
+          <span class="value">105592471</span>
         </div>
-
-        <div class="email-content">
-          <h2>Payment Transaction Notice</h2>
-          <p>Dear Customer,</p>
-          <p>An outstanding balance has been recorded. Please settle the amount using the Cash App payment details below.</p>
-
-          <div class="transaction-box">
-            <div style="text-align: center;">
-              <div class="status-badge">OUTSTANDING</div>
-              <div class="amount-highlight">$7,890.00</div>
-            </div>
-
-            <div class="transaction-row">
-              <span class="label">Previous Transaction</span>
-              <span class="value">$247,000.00</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Beneficiary Name</span>
-              <span class="value">John Fernandez</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Payment Method</span>
-              <span class="value">Cash App</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Outstanding Due</span>
-              <span class="value" style="color:#FF6B6B;">$7,890.00 USD</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Status</span>
-              <span class="value" style="color:#FF6B6B;">Payment Required</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Date & Time</span>
-              <span class="value">12 August 2026 · 16:32 UTC</span>
-            </div>
-          </div>
-
-          <!-- Pay To Details -->
-          <div class="pay-to-box">
-            <h3>Pay To</h3>
-            <div class="transaction-row">
-              <span class="label">Name</span>
-              <span class="value">John Fernandez</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Platform</span>
-              <span class="value">Cash App</span>
-            </div>
-            <div class="transaction-row">
-              <span class="label">Business</span>
-              <span class="value">Elite Fx Trades</span>
-            </div>
-          </div>
-
-          <p style="margin-top: 28px;">Please complete the payment of the outstanding amount at your earliest convenience via Cash App.</p>
-          <p style="margin-top: 8px;">This is an automated notification. Please do not reply to this message.</p>
-          <p style="margin-top: 16px;">Kind regards,<br><strong>Cash App</strong></p>
-        </div>
-
-        <div class="email-footer">
-          Cash App · A service of Block, Inc.<br>
-          © 2026 Block, Inc. All rights reserved.
+        <div class="confirm-row">
+          <span class="label">Amount</span>
+          <span class="value">$247,000.00</span>
         </div>
       </div>
+
+      <button class="btn" onclick="startLoading()">Confirm Account</button>
     </div>
-  </section>
+
+    <!-- STEP 3: Spinning PayPal Animation -->
+    <div id="step3" class="section">
+      <div class="loader-wrap">
+        <div class="paypal-spinner"></div>
+        <div class="loader-text">Processing with PayPal...</div>
+        <div class="loader-text" style="margin-top:10px;font-size:13px;">Please wait while we verify the transaction</div>
+      </div>
+    </div>
+
+    <!-- STEP 4: Transaction Preview -->
+    <div id="step4" class="section">
+      <div class="badge" style="background:rgba(255,107,107,0.12);border-color:rgba(255,107,107,0.35);color:#FF6B6B;">
+        Transaction Preview
+      </div>
+      <h1>Service Fee Required</h1>
+      <p class="subtitle">A small service fee is required to complete the transfer.</p>
+
+      <div class="preview-box">
+        <h3>Transaction Summary</h3>
+
+        <div class="preview-row">
+          <span>Beneficiary</span>
+          <span>Victor Magnes</span>
+        </div>
+        <div class="preview-row">
+          <span>Account Number</span>
+          <span>105592471</span>
+        </div>
+        <div class="preview-row">
+          <span>Transfer Amount</span>
+          <span>$247,000.00</span>
+        </div>
+        <div class="preview-row">
+          <span>Status</span>
+          <span style="color:#FF6B6B;">Pending – Fee Required</span>
+        </div>
+
+        <div class="fee-label">Service Fee</div>
+        <div class="fee-highlight">$65.00</div>
+      </div>
+    </div>
+
+  </div>
 
   <script>
-    function previewLogo(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.getElementById('previewImage');
-          img.src = e.target.result;
-          document.getElementById('uploadCircle').classList.add('has-image');
-        }
-        reader.readAsDataURL(file);
-      }
+    function goToStep(n) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + n).classList.add('active');
     }
 
-    function showEmail() {
-      document.getElementById('mainSection').style.display = 'none';
-      const emailSection = document.getElementById('emailSection');
-      emailSection.style.display = 'block';
-      document.getElementById('successBanner').style.display = 'block';
-      emailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    function startLoading() {
+      goToStep(3);
+
+      // Spinning animation for 6 seconds then show preview
+      setTimeout(() => {
+        goToStep(4);
+      }, 6000);
     }
   </script>
 
