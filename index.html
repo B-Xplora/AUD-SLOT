@@ -1,442 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PayPal — Access Funds</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --paypal-blue: #0070BA;
-      --paypal-dark: #003087;
-      --paypal-light: #009CDE;
-      --black: #0B0B0F;
-      --dark: #16161D;
-      --gray: #8B8B9E;
-      --white: #FFFFFF;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CASHAPP – Simulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00D632;
+    --green-dark: #00B82A;
+    --green-light: #E8F9ED;
+    --white: #FFFFFF;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-500: #64748B;
+    --gray-700: #334155;
+    --gray-900: #0F172A;
+    --shadow: 0 4px 20px rgba(0,0,0,0.06);
+    --radius: 18px;
+  }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
 
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  /* ========== WELCOME / LOADING ========== */
+  #welcome {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(160deg, #00D632 0%, #00B82A 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.6s ease, visibility 0.6s;
+  }
+
+  #welcome.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .welcome-logo {
+    width: 88px;
+    height: 88px;
+    background: white;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  }
+
+  .welcome-logo svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .welcome-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .welcome-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 48px;
+  }
+
+  .loader {
+    width: 200px;
+    height: 4px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .loader-bar {
+    height: 100%;
+    width: 0%;
+    background: white;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  /* ========== APP SHELL ========== */
+  #app {
+    display: none;
+    min-height: 100dvh;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--gray-50);
+    position: relative;
+  }
+
+  #app.visible {
+    display: flex;
+  }
+
+  /* Header */
+  .header {
+    background: white;
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gray-100);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .header-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--green-dark);
+    font-size: 15px;
+  }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    padding: 20px 16px 100px;
+    overflow-y: auto;
+  }
+
+  /* Balance Card */
+  .balance-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+
+  .balance-label {
+    font-size: 13px;
+    color: var(--gray-500);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .balance-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .balance-amount {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: var(--gray-900);
+  }
+
+  .btn-access {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-access:hover {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+  }
+
+  .btn-access:active {
+    transform: scale(0.97);
+  }
+
+  /* Shortcut grid */
+  .shortcuts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .shortcut {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+    border: none;
+    font-family: inherit;
+  }
+
+  .shortcut:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+
+  .shortcut:active {
+    transform: scale(0.96);
+  }
+
+  .shortcut-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green-dark);
+  }
+
+  .shortcut-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+
+  /* Section title */
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Activity list */
+  .activity-list {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 14px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+
+  .activity-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .activity-info {
+    flex: 1;
+  }
+
+  .activity-name {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .activity-date {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 2px;
+  }
+
+  .activity-amount {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .amount-in { color: var(--green-dark); }
+  .amount-out { color: var(--gray-900); }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: white;
+    border-top: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 calc(10px + env(safe-area-inset-bottom));
+    z-index: 40;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-500);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: color 0.2s;
+  }
+
+  .nav-item.active {
+    color: var(--green-dark);
+  }
+
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* ========== MODALS ========== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 24px 24px 0 0;
+    padding: 24px 20px 32px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-overlay.show .modal {
+    transform: translateY(0);
+  }
+
+  .modal-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--gray-200);
+    border-radius: 4px;
+    margin: 0 auto 20px;
+  }
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .modal-sub {
+    font-size: 14px;
+    color: var(--gray-500);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .recipient-card {
+    background: var(--gray-50);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .recipient-avatar {
+    width: 64px;
+    height: 64px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+
+  .recipient-name {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .recipient-tag {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-top: 4px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: var(--green-dark);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+
+  .btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-700);
+    margin-top: 12px;
+  }
+
+  .btn-secondary:hover {
+    background: var(--gray-200);
+  }
+
+  /* Transaction Preview */
+  .preview-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-size: 15px;
+  }
+
+  .preview-row.total {
+    border-top: 1px solid var(--gray-200);
+    margin-top: 8px;
+    padding-top: 16px;
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  .preview-label {
+    color: var(--gray-500);
+  }
+
+  .sim-notice {
+    background: #FEF3C7;
+    color: #92400E;
+    font-size: 13px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin: 20px 0;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  /* Disclaimer */
+  .disclaimer {
+    margin-top: 32px;
+    padding: 16px;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  .disclaimer strong {
+    display: block;
+    color: #B91C1C;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .disclaimer small {
+    color: #7F1D1D;
+    font-size: 12px;
+  }
+
+  /* Utility */
+  .hidden { display: none !important; }
+
+  @media (min-width: 481px) {
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--black);
-      color: var(--white);
-      line-height: 1.5;
-      min-height: 100vh;
+      background: #E5E7EB;
     }
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 22px 32px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      background: linear-gradient(180deg, rgba(0,112,186,0.12), transparent);
+    #app {
+      box-shadow: 0 0 40px rgba(0,0,0,0.08);
+      min-height: 100dvh;
     }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #fff;
+    .modal {
+      border-radius: 24px;
+      margin-bottom: 24px;
     }
-
-    .logo-icon {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, var(--paypal-blue), var(--paypal-dark));
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
-      color: white;
-    }
-
-    .container {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 40px 24px 60px;
-      text-align: center;
-    }
-
-    /* Circular badge */
-    .badge-circle-area {
-      margin: 0 auto 28px;
-      width: 110px;
-      height: 110px;
-    }
-
-    .badge-circle {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      border: 4px solid var(--paypal-blue);
-      background: rgba(0, 112, 186, 0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      box-shadow: 0 0 0 6px rgba(0, 112, 186, 0.15);
-    }
-
-    .badge-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      display: none;
-    }
-
-    .badge-circle.has-image img {
-      display: block;
-    }
-
-    .badge-placeholder {
-      text-align: center;
-      color: var(--paypal-light);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(0, 112, 186, 0.15);
-      border: 1px solid rgba(0, 156, 222, 0.4);
-      color: var(--paypal-light);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 6px 16px;
-      border-radius: 100px;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-size: clamp(26px, 5vw, 36px);
-      font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      font-size: 16px;
-      color: var(--gray);
-      margin-bottom: 28px;
-    }
-
-    .balance-card {
-      background: var(--dark);
-      border: 1px solid rgba(0, 112, 186, 0.25);
-      border-radius: 20px;
-      padding: 32px 24px;
-      margin-bottom: 28px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .balance-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--paypal-dark), var(--paypal-blue), var(--paypal-light));
-    }
-
-    .balance-label {
-      font-size: 14px;
-      color: var(--gray);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .balance-amount {
-      font-size: 42px;
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      color: var(--paypal-light);
-    }
-
-    .name {
-      font-size: 15px;
-      color: var(--gray);
-      margin-top: 10px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 320px;
-      padding: 16px 28px;
-      border-radius: 100px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      background: linear-gradient(135deg, var(--paypal-blue), var(--paypal-dark));
-      color: white;
-      transition: all 0.25s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(0, 112, 186, 0.4);
-    }
-
-    .section { display: none; }
-    .section.active { display: block; }
-
-    /* Confirm card */
-    .confirm-card {
-      background: var(--dark);
-      border: 1px solid rgba(0, 112, 186, 0.25);
-      border-radius: 16px;
-      padding: 28px 24px;
-      text-align: left;
-      margin-bottom: 28px;
-    }
-
-    .confirm-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 14px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 15px;
-    }
-
-    .confirm-row:last-child {
-      border-bottom: none;
-    }
-
-    .confirm-row .label {
-      color: var(--gray);
-    }
-
-    .confirm-row .value {
-      font-weight: 600;
-      color: white;
-    }
-
-    /* PayPal Spinner */
-    .loader-wrap {
-      padding: 70px 20px;
-      text-align: center;
-    }
-
-    .paypal-spinner {
-      width: 64px;
-      height: 64px;
-      border: 5px solid rgba(0, 112, 186, 0.2);
-      border-top-color: var(--paypal-blue);
-      border-right-color: var(--paypal-light);
-      border-radius: 50%;
-      animation: spin 0.85s linear infinite;
-      margin: 0 auto 28px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .loader-text {
-      font-size: 16px;
-      color: var(--gray);
-    }
-
-    /* Transaction Preview */
-    .preview-box {
-      background: var(--dark);
-      border: 1px solid rgba(0, 112, 186, 0.3);
-      border-radius: 16px;
-      padding: 28px 24px;
-      text-align: left;
-      margin-top: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .preview-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--paypal-dark), var(--paypal-blue), var(--paypal-light));
-    }
-
-    .preview-box h3 {
-      font-size: 18px;
-      margin-bottom: 18px;
-      color: var(--paypal-light);
-    }
-
-    .preview-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 14px;
-    }
-
-    .preview-row:last-child {
-      border-bottom: none;
-    }
-
-    .fee-highlight {
-      font-size: 32px;
-      font-weight: 800;
-      color: #FF6B6B;
-      text-align: center;
-      margin: 18px 0 8px;
-    }
-
-    .fee-label {
-      text-align: center;
-      font-size: 14px;
-      color: var(--gray);
-      margin-bottom: 10px;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
+<!-- ========== WELCOME SCREEN ========== -->
+<div id="welcome">
+  <div class="welcome-logo">
+    <svg viewBox="0 0 48 48" fill="none">
+      <rect width="48" height="48" rx="12" fill="#00D632"/>
+      <path d="M14 24h20M24 14v20" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h1 class="welcome-title">Welcome to CASHAPP</h1>
+  <p class="welcome-sub">Secure payments simulation</p>
+  <div class="loader">
+    <div class="loader-bar" id="loaderBar"></div>
+  </div>
+</div>
+
+<!-- ========== MAIN APP ========== -->
+<div id="app">
+  <!-- Header -->
   <header class="header">
-    <div class="logo">
-      <div class="logo-icon">PP</div>
-      PayPal
-    </div>
+    <div class="header-title">Home</div>
+    <div class="avatar">JD</div>
   </header>
 
-  <div class="container">
-
-    <!-- STEP 1: Balance -->
-    <div id="step1" class="section active">
-      <!-- Circular badge -->
-      <div class="badge-circle-area">
-        <div class="badge-circle has-image" id="badgeCircle">
-          <img id="badgeImage" src="IMG_8165.jpeg" alt="Badge">
-          <div class="badge-placeholder">
-            <div>Badge</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="badge">Secure Verification</div>
-      <h1>Available Balance</h1>
-      <p class="subtitle">Access your funds to continue the transaction.</p>
-
-      <div class="balance-card">
-        <div class="balance-label">Total Balance</div>
-        <div class="balance-amount">$247,000.00</div>
-        <div class="name">Victor Magnes</div>
-      </div>
-
-      <button class="btn" onclick="goToStep(2)">Access Funds</button>
-    </div>
-
-    <!-- STEP 2: Confirm Receiving Account -->
-    <div id="step2" class="section">
-      <div class="badge">Confirm Account</div>
-      <h1>Confirm Receiving Account</h1>
-      <p class="subtitle">Please verify the destination account details before proceeding.</p>
-
-      <div class="confirm-card">
-        <div class="confirm-row">
-          <span class="label">Beneficiary</span>
-          <span class="value">Victor Magnes</span>
-        </div>
-        <div class="confirm-row">
-          <span class="label">Account Number</span>
-          <span class="value">105592471</span>
-        </div>
-        <div class="confirm-row">
-          <span class="label">Amount</span>
-          <span class="value">$247,000.00</span>
-        </div>
-      </div>
-
-      <button class="btn" onclick="startLoading()">Confirm Account</button>
-    </div>
-
-    <!-- STEP 3: Spinning PayPal Animation -->
-    <div id="step3" class="section">
-      <div class="loader-wrap">
-        <div class="paypal-spinner"></div>
-        <div class="loader-text">Processing with PayPal...</div>
-        <div class="loader-text" style="margin-top:10px;font-size:13px;">Please wait while we verify the transaction</div>
+  <!-- Main -->
+  <main class="main">
+    <!-- Balance -->
+    <div class="balance-card">
+      <div class="balance-label">Available Balance</div>
+      <div class="balance-row">
+        <div class="balance-amount">$4,870.00</div>
+        <button class="btn-access" onclick="alert('Access Funds – Simulation only')">Access Funds</button>
       </div>
     </div>
 
-    <!-- STEP 4: Transaction Preview -->
-    <div id="step4" class="section">
-      <div class="badge" style="background:rgba(255,107,107,0.12);border-color:rgba(255,107,107,0.35);color:#FF6B6B;">
-        Transaction Preview
+    <!-- Shortcuts -->
+    <div class="shortcuts">
+      <button class="shortcut" onclick="openSend()">
+        <div class="shortcut-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </div>
+        <span class="shortcut-label">Send</span>
+      </button>
+      <button class="shortcut">
+        <div class="shortcut-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </div>
+        <span class="shortcut-label">Request</span>
+      </button>
+      <button class="shortcut" onclick="openPayment()">
+        <div class="shortcut-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        </div>
+        <span class="shortcut-label">Pay</span>
+      </button>
+      <button class="shortcut">
+        <div class="shortcut-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <span class="shortcut-label">Activity</span>
+      </button>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section-title">
+      <span>Recent Activity</span>
+      <span style="font-size:13px;color:var(--green-dark);font-weight:500;cursor:pointer">See all</span>
+    </div>
+
+    <div class="activity-list">
+      <div class="activity-item">
+        <div class="activity-icon">↓</div>
+        <div class="activity-info">
+          <div class="activity-name">From Alex M.</div>
+          <div class="activity-date">Today · 10:24 AM</div>
+        </div>
+        <div class="activity-amount amount-in">+$120.00</div>
       </div>
-      <h1>Service Fee Required</h1>
-      <p class="subtitle">A small service fee is required to complete the transfer.</p>
-
-      <div class="preview-box">
-        <h3>Transaction Summary</h3>
-
-        <div class="preview-row">
-          <span>Beneficiary</span>
-          <span>Victor Magnes</span>
+      <div class="activity-item">
+        <div class="activity-icon">↑</div>
+        <div class="activity-info">
+          <div class="activity-name">To Sarah K.</div>
+          <div class="activity-date">Yesterday · 4:15 PM</div>
         </div>
-        <div class="preview-row">
-          <span>Account Number</span>
-          <span>105592471</span>
+        <div class="activity-amount amount-out">-$45.50</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-icon">↑</div>
+        <div class="activity-info">
+          <div class="activity-name">Coffee Shop</div>
+          <div class="activity-date">Aug 14 · 8:02 AM</div>
         </div>
-        <div class="preview-row">
-          <span>Transfer Amount</span>
-          <span>$247,000.00</span>
+        <div class="activity-amount amount-out">-$6.75</div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-icon">↓</div>
+        <div class="activity-info">
+          <div class="activity-name">From Payroll</div>
+          <div class="activity-date">Aug 12 · 9:00 AM</div>
         </div>
-        <div class="preview-row">
-          <span>Status</span>
-          <span style="color:#FF6B6B;">Pending – Fee Required</span>
-        </div>
-
-        <div class="fee-label">Service Fee</div>
-        <div class="fee-highlight">$65.00</div>
+        <div class="activity-amount amount-in">+$2,450.00</div>
       </div>
     </div>
 
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <strong>DISCLAIMER: Incorporation funds will be blocked permanently.</strong>
+      <small>fund transfers are processed.</small>
+    </div>
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <button class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
+      Home
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Activity
+    </button>
+    <button class="nav-item" onclick="openPayment()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Payments
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </button>
+    <button class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg>
+      Support
+    </button>
+  </nav>
+</div>
+
+<!-- ========== RECIPIENT VERIFICATION MODAL ========== -->
+<div class="modal-overlay" id="verifyModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Verify Recipient</h2>
+    <p class="modal-sub">Please confirm the receiving information is correct before proceeding.</p>
+
+    <div class="recipient-card">
+      <div class="recipient-avatar">JF</div>
+      <div class="recipient-name">$JohnFernandes95</div>
+      <div class="recipient-tag">Cash Tag</div>
+    </div>
+
+    <button class="btn btn-primary" onclick="confirmRecipient()">Confirm Receiving Information</button>
+    <button class="btn btn-secondary" onclick="closeModal('verifyModal')">Cancel</button>
   </div>
+</div>
 
-  <script>
-    function goToStep(n) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById('step' + n).classList.add('active');
-    }
+<!-- ========== TRANSACTION PREVIEW MODAL ========== -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">Transaction Preview</h2>
+    <p class="modal-sub">Review the details below</p>
 
-    function startLoading() {
-      goToStep(3);
+    <div class="preview-row">
+      <span class="preview-label">Recipient</span>
+      <span>$JohnFernandes95</span>
+    </div>
+    <div class="preview-row">
+      <span class="preview-label">Amount</span>
+      <span>$4,870.00</span>
+    </div>
+    <div class="preview-row">
+      <span class="preview-label">Service fee</span>
+      <span>$121.00</span>
+    </div>
+    <div class="preview-row total">
+      <span>Total</span>
+      <span>$4,991.00</span>
+    </div>
 
-      // Spinning animation for 6 seconds then show preview
+    <div class="sim-notice">
+      This is a simulation and does not process real funds.
+    </div>
+
+    <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
+    <button class="btn btn-secondary" onclick="closeModal('previewModal')">Cancel</button>
+  </div>
+</div>
+
+<script>
+  // Loading animation
+  const loaderBar = document.getElementById('loaderBar');
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 18 + 8;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
       setTimeout(() => {
-        goToStep(4);
-      }, 6000);
+        document.getElementById('welcome').classList.add('hidden');
+        document.getElementById('app').classList.add('visible');
+      }, 400);
     }
-  </script>
+    loaderBar.style.width = progress + '%';
+  }, 280);
 
+  // Modal helpers
+  function openModal(id) {
+    document.getElementById(id).classList.add('show');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+  }
+
+  // Payment flow
+  function openPayment() {
+    openModal('verifyModal');
+  }
+  function openSend() {
+    openModal('verifyModal');
+  }
+
+  function confirmRecipient() {
+    closeModal('verifyModal');
+    setTimeout(() => openModal('previewModal'), 280);
+  }
+
+  function confirmPayment() {
+    closeModal('previewModal');
+    // Simulated success feedback
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+      background: #0F172A; color: white; padding: 14px 24px; border-radius: 14px;
+      font-size: 14px; font-weight: 500; z-index: 300; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    `;
+    toast.textContent = 'Payment simulated successfully';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
+  }
+
+  // Close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('show');
+      }
+    });
+  });
+</script>
 </body>
 </html>
