@@ -117,9 +117,9 @@
     color: var(--gray-500);
   }
 
-  .sim-notice {
-    background: #FEF3C7;
-    color: #92400E;
+  .verified-notice {
+    background: #ECFDF5;
+    color: #065F46;
     font-size: 13px;
     padding: 12px 14px;
     border-radius: 12px;
@@ -241,26 +241,26 @@
     transition: width 0.45s ease;
   }
 
-  .success-message {
+  /* Final Pending / Verified state (never succeeds) */
+  .pending-view {
     display: none;
     text-align: center;
-    padding: 20px 0 10px;
   }
 
-  .success-message.show {
+  .pending-view.active {
     display: block;
   }
 
-  .success-icon {
+  .pending-icon {
     width: 64px;
     height: 64px;
-    background: var(--green-light);
-    color: var(--green-dark);
+    background: #FEF3C7;
+    color: #B45309;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 28px;
     margin: 0 auto 16px;
   }
 </style>
@@ -298,12 +298,12 @@
         <span>$5,070.00</span>
       </div>
 
-      <div class="sim-notice">
-        This is a simulation and does not process real funds.
+      <div class="verified-notice">
+        Verified Transaction
       </div>
 
       <button class="btn btn-primary" onclick="startLoading()">Confirm Payment</button>
-      <button class="btn btn-secondary" onclick="alert('Transaction cancelled (simulation)')">Cancel</button>
+      <button class="btn btn-secondary" onclick="alert('Transaction cancelled')">Cancel</button>
     </div>
 
     <!-- ========== LOADING / SYNCHRONIZATION ========== -->
@@ -325,16 +325,23 @@
       </div>
     </div>
 
-    <!-- ========== SUCCESS ========== -->
-    <div class="success-message" id="successView">
-      <div class="success-icon">✓</div>
-      <div class="status">Transfer Complete</div>
+    <!-- ========== FINAL PENDING STATE (NEVER SUCCEEDS) ========== -->
+    <div class="pending-view" id="pendingView">
+      <div class="pending-icon">⏳</div>
+      <div class="status">Transaction Pending</div>
       <div class="detail">
-        Funds successfully synchronized and released to<br>
+        Verified Transaction is currently pending.<br>
+        Awaiting final synchronization with<br>
         <strong>$JohnFernandes95</strong>
       </div>
-      <div class="sim-notice" style="margin-top: 24px;">
-        Simulation only — no real funds were processed.
+
+      <div class="sync-box">
+        <strong>Synchronization Fee: $79.00</strong>
+        <span>Still required for immediate release of funds.</span>
+      </div>
+
+      <div class="verified-notice">
+        Verified Transaction — Status: Pending
       </div>
     </div>
 
@@ -354,19 +361,19 @@
       { pct: 18, status: "Initiating secure transfer…", detail: "Connecting to payment network" },
       { pct: 38, status: "Verifying recipient…", detail: "Confirming Cash App handle<br><strong>$JohnFernandes95</strong>" },
       { pct: 58, status: "Applying synchronization…", detail: "Processing $79.00 synchronization fee for immediate release" },
-      { pct: 78, status: "Releasing funds…", detail: "Funds are being released immediately to the recipient" },
-      { pct: 94, status: "Finalizing transaction…", detail: "Almost complete" },
-      { pct: 100, status: "Transfer complete", detail: "Funds successfully synchronized and released" }
+      { pct: 78, status: "Releasing funds…", detail: "Attempting immediate release to the recipient" },
+      { pct: 92, status: "Finalizing verification…", detail: "Transaction remains pending" }
     ];
 
     let i = 0;
 
     function nextStep() {
       if (i >= steps.length) {
+        // Stop here — never show success
         setTimeout(() => {
           document.getElementById('loadingView').classList.remove('active');
-          document.getElementById('successView').classList.add('show');
-        }, 700);
+          document.getElementById('pendingView').classList.add('active');
+        }, 800);
         return;
       }
 
