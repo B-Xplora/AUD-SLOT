@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>C App</title>
+<title>C App – Simulation</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -117,7 +117,6 @@
     display: flex;
   }
 
-  /* Header */
   .header {
     background: white;
     padding: 16px 20px 12px;
@@ -149,14 +148,12 @@
     font-size: 15px;
   }
 
-  /* Main content */
   .main {
     flex: 1;
     padding: 20px 16px 100px;
     overflow-y: auto;
   }
 
-  /* Balance Card */
   .balance-card {
     background: white;
     border-radius: var(--radius);
@@ -208,7 +205,6 @@
     transform: scale(0.97);
   }
 
-  /* Shortcut grid */
   .shortcuts {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -257,7 +253,6 @@
     color: var(--gray-700);
   }
 
-  /* Section title */
   .section-title {
     font-size: 15px;
     font-weight: 600;
@@ -268,7 +263,6 @@
     align-items: center;
   }
 
-  /* Activity list */
   .activity-list {
     background: white;
     border-radius: var(--radius);
@@ -322,7 +316,6 @@
   .amount-in { color: var(--green-dark); }
   .amount-out { color: var(--gray-900); }
 
-  /* Bottom Navigation */
   .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -489,7 +482,6 @@
     background: var(--gray-200);
   }
 
-  /* Transaction Preview */
   .preview-row {
     display: flex;
     justify-content: space-between;
@@ -520,7 +512,6 @@
     font-weight: 500;
   }
 
-  /* Disclaimer */
   .disclaimer {
     margin-top: 32px;
     padding: 16px;
@@ -542,13 +533,79 @@
     font-size: 12px;
   }
 
-  /* Utility */
+  /* ========== TRANSACTION LOADING SCREEN ========== */
+  #loadingModal .modal {
+    text-align: center;
+    padding-bottom: 40px;
+  }
+
+  .loading-spinner {
+    width: 64px;
+    height: 64px;
+    border: 4px solid var(--gray-200);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    margin: 10px auto 24px;
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-status {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .loading-detail {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .sync-fee-box {
+    background: var(--green-light);
+    border-radius: 14px;
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .sync-fee-box strong {
+    display: block;
+    font-size: 15px;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+
+  .sync-fee-box span {
+    font-size: 13px;
+    color: var(--gray-700);
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: var(--gray-200);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 24px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--green);
+    border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+
   .hidden { display: none !important; }
 
   @media (min-width: 481px) {
-    body {
-      background: #E5E7EB;
-    }
+    body { background: #E5E7EB; }
     #app {
       box-shadow: 0 0 40px rgba(0,0,0,0.08);
       min-height: 100dvh;
@@ -562,7 +619,7 @@
 </head>
 <body>
 
-<!-- ========== WELCOME SCREEN ========== -->
+<!-- WELCOME SCREEN -->
 <div id="welcome">
   <div class="welcome-logo">
     <svg viewBox="0 0 48 48" fill="none">
@@ -577,26 +634,22 @@
   </div>
 </div>
 
-<!-- ========== MAIN APP ========== -->
+<!-- MAIN APP -->
 <div id="app">
-  <!-- Header -->
   <header class="header">
     <div class="header-title">Home</div>
     <div class="avatar">JD</div>
   </header>
 
-  <!-- Main -->
   <main class="main">
-    <!-- Balance -->
     <div class="balance-card">
       <div class="balance-label">Available Balance</div>
       <div class="balance-row">
         <div class="balance-amount">$4,870.00</div>
-        <button class="btn-access" onclick="alert('Access Funds with Send Button')">Access Funds</button>
+        <button class="btn-access" onclick="alert('Access Funds – Simulation only')">Access Funds</button>
       </div>
     </div>
 
-    <!-- Shortcuts -->
     <div class="shortcuts">
       <button class="shortcut" onclick="openSend()">
         <div class="shortcut-icon">
@@ -624,7 +677,6 @@
       </button>
     </div>
 
-    <!-- Recent Activity -->
     <div class="section-title">
       <span>Recent Activity</span>
       <span style="font-size:13px;color:var(--green-dark);font-weight:500;cursor:pointer">See all</span>
@@ -635,20 +687,18 @@
         <div class="activity-icon">↓</div>
         <div class="activity-info">
           <div class="activity-name">From Cash app</div>
-          <div class="activity-date">Today </div>
+          <div class="activity-date">Today</div>
         </div>
-        <div class="activity-amount amount-in">4870</div>
+        <div class="activity-amount amount-in">+$4,870.00</div>
       </div>
-    
+    </div>
 
-    <!-- Disclaimer -->
     <div class="disclaimer">
       <strong>DISCLAIMER: Incorporation funds will be blocked permanently.</strong>
       <small>fund transfers are processed.</small>
     </div>
   </main>
 
-  <!-- Bottom Nav -->
   <nav class="bottom-nav">
     <button class="nav-item active">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
@@ -673,7 +723,7 @@
   </nav>
 </div>
 
-<!-- ========== RECIPIENT VERIFICATION MODAL ========== -->
+<!-- RECIPIENT VERIFICATION -->
 <div class="modal-overlay" id="verifyModal">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -683,7 +733,7 @@
     <div class="recipient-card">
       <div class="recipient-avatar">JF</div>
       <div class="recipient-name">$JohnFernandes95</div>
-      <div class="recipient-tag">Cash Tag</div>
+      <div class="recipient-tag">Cash App Handle</div>
     </div>
 
     <button class="btn btn-primary" onclick="confirmRecipient()">Confirm Receiving Information</button>
@@ -691,7 +741,7 @@
   </div>
 </div>
 
-<!-- ========== TRANSACTION PREVIEW MODAL ========== -->
+<!-- TRANSACTION PREVIEW -->
 <div class="modal-overlay" id="previewModal">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -710,22 +760,50 @@
       <span class="preview-label">Service fee</span>
       <span>$121.00</span>
     </div>
+    <div class="preview-row">
+      <span class="preview-label">Synchronization</span>
+      <span>$79.00</span>
+    </div>
     <div class="preview-row total">
       <span>Total</span>
-      <span>$4,991.00</span>
+      <span>$5,070.00</span>
     </div>
 
     <div class="sim-notice">
-      verified
+      This is a simulation and does not process real funds.
     </div>
 
-    <button class="btn btn-primary" onclick="confirmPayment()">Confirm Payment</button>
+    <button class="btn btn-primary" onclick="startTransaction()">Confirm Payment</button>
     <button class="btn btn-secondary" onclick="closeModal('previewModal')">Cancel</button>
   </div>
 </div>
 
+<!-- PROFESSIONAL LOADING / SYNCHRONIZATION SCREEN -->
+<div class="modal-overlay" id="loadingModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    
+    <div class="loading-spinner"></div>
+    
+    <div class="loading-status" id="loadingStatus">Initiating secure transfer…</div>
+    <div class="loading-detail" id="loadingDetail">
+      Preparing transaction to Cash App handle<br>
+      <strong>$JohnFernandes95</strong>
+    </div>
+
+    <div class="sync-fee-box">
+      <strong>Synchronization Fee: $79.00</strong>
+      <span>Required for immediate release of funds to the recipient’s Cash App account.</span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="txProgress"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Loading animation
+  // Welcome loading
   const loaderBar = document.getElementById('loaderBar');
   let progress = 0;
   const interval = setInterval(() => {
@@ -741,7 +819,6 @@
     loaderBar.style.width = progress + '%';
   }, 280);
 
-  // Modal helpers
   function openModal(id) {
     document.getElementById(id).classList.add('show');
   }
@@ -749,7 +826,6 @@
     document.getElementById(id).classList.remove('show');
   }
 
-  // Payment flow
   function openPayment() {
     openModal('verifyModal');
   }
@@ -762,18 +838,53 @@
     setTimeout(() => openModal('previewModal'), 280);
   }
 
-  function confirmPayment() {
+  // Professional transaction loading sequence
+  function startTransaction() {
     closeModal('previewModal');
-    // Simulated success feedback
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-      background: #0F172A; color: white; padding: 14px 24px; border-radius: 14px;
-      font-size: 14px; font-weight: 500; z-index: 300; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-    `;
-    toast.textContent = 'Payment simulated successfully';
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2500);
+    openModal('loadingModal');
+
+    const status = document.getElementById('loadingStatus');
+    const detail = document.getElementById('loadingDetail');
+    const progressBar = document.getElementById('txProgress');
+
+    const steps = [
+      { pct: 15, status: "Initiating secure transfer…", detail: "Connecting to payment network" },
+      { pct: 35, status: "Verifying recipient…", detail: "Confirming Cash App handle<br><strong>$JohnFernandes95</strong>" },
+      { pct: 55, status: "Applying synchronization…", detail: "Processing $79.00 synchronization fee for immediate release" },
+      { pct: 75, status: "Releasing funds…", detail: "Funds are being released immediately to the recipient" },
+      { pct: 92, status: "Finalizing transaction…", detail: "Almost complete" },
+      { pct: 100, status: "Transfer complete", detail: "Funds successfully synchronized and released to<br><strong>$JohnFernandes95</strong>" }
+    ];
+
+    let i = 0;
+    const runStep = () => {
+      if (i >= steps.length) {
+        setTimeout(() => {
+          closeModal('loadingModal');
+          // Success toast
+          const toast = document.createElement('div');
+          toast.style.cssText = `
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: #0F172A; color: white; padding: 14px 24px; border-radius: 14px;
+            font-size: 14px; font-weight: 500; z-index: 300; box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            text-align: center; max-width: 90%;
+          `;
+          toast.innerHTML = "Transaction simulated successfully<br><small style='opacity:0.8'>Funds released to $JohnFernandes95</small>";
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 3500);
+        }, 800);
+        return;
+      }
+
+      const step = steps[i];
+      status.textContent = step.status;
+      detail.innerHTML = step.detail;
+      progressBar.style.width = step.pct + '%';
+      i++;
+      setTimeout(runStep, 1100 + Math.random() * 400);
+    };
+
+    setTimeout(runStep, 600);
   }
 
   // Close modals on overlay click
