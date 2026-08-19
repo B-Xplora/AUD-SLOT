@@ -3,22 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Pending Transaction</title>
+<title>Revolut</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green: #00D632;
-    --green-dark: #00B82A;
-    --green-light: #E8F9ED;
+    --revolut-blue: #0666EB;
+    --revolut-dark: #0B0E11;
+    --revolut-gray: #8B95A8;
     --white: #FFFFFF;
-    --gray-50: #F8FAFC;
-    --gray-100: #F1F5F9;
-    --gray-200: #E2E8F0;
-    --gray-500: #64748B;
-    --gray-700: #334155;
-    --gray-900: #0F172A;
-    --shadow: 0 4px 24px rgba(0,0,0,0.08);
-    --radius: 20px;
   }
 
   * {
@@ -30,8 +22,8 @@
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: #F1F5F9;
-    color: var(--gray-900);
+    background: #0B0E11;
+    color: var(--white);
     min-height: 100dvh;
     display: flex;
     align-items: center;
@@ -39,354 +31,272 @@
     padding: 20px;
   }
 
-  .container {
+  .phone {
     width: 100%;
-    max-width: 420px;
+    max-width: 390px;
+    background: #12151A;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    position: relative;
   }
 
-  .card {
-    background: white;
-    border-radius: var(--radius);
-    padding: 28px 24px 32px;
-    box-shadow: var(--shadow);
-  }
-
-  .card-title {
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 6px;
-  }
-
-  .card-sub {
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 24px 8px;
     font-size: 14px;
-    color: var(--gray-500);
-    text-align: center;
-    margin-bottom: 28px;
+    font-weight: 600;
   }
 
-  .recipient-box {
-    background: var(--gray-50);
-    border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 24px;
+  .header {
+    padding: 12px 24px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .recipient-avatar {
-    width: 64px;
-    height: 64px;
-    background: var(--green-light);
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    background: #1E2329;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 12px;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--green-dark);
-  }
-
-  .recipient-name {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
+    color: #8B95A8;
   }
 
-  .recipient-tag {
-    font-size: 13px;
-    color: var(--gray-500);
-    margin-top: 4px;
+  .content {
+    padding: 10px 24px 40px;
   }
 
-  .row {
-    display: flex;
-    justify-content: space-between;
-    padding: 13px 0;
-    font-size: 15px;
+  .balance-label {
+    font-size: 14px;
+    color: var(--revolut-gray);
+    margin-bottom: 8px;
   }
 
-  .row.total {
-    border-top: 1px solid var(--gray-200);
-    margin-top: 8px;
-    padding-top: 18px;
+  .balance-amount {
+    font-size: 42px;
     font-weight: 700;
-    font-size: 17px;
+    letter-spacing: -1.5px;
+    margin-bottom: 40px;
   }
 
-  .label {
-    color: var(--gray-500);
-  }
-
-  .verified-notice {
-    background: #ECFDF5;
-    color: #065F46;
-    font-size: 13px;
-    padding: 12px 14px;
-    border-radius: 12px;
-    margin: 22px 0;
-    text-align: center;
+  .currency {
+    font-size: 22px;
     font-weight: 500;
+    color: var(--revolut-gray);
+    margin-left: 4px;
   }
 
-  .btn {
+  .btn-open {
     width: 100%;
-    padding: 16px;
+    background: var(--revolut-blue);
+    color: white;
+    border: none;
+    padding: 18px;
     border-radius: 16px;
     font-size: 16px;
     font-weight: 600;
-    border: none;
     cursor: pointer;
     font-family: inherit;
     transition: all 0.2s;
   }
 
-  .btn-primary {
-    background: var(--green);
-    color: white;
+  .btn-open:hover {
+    background: #0558C9;
   }
 
-  .btn-primary:hover {
-    background: var(--green-dark);
-  }
-
-  .btn-primary:active {
+  .btn-open:active {
     transform: scale(0.98);
   }
 
-  .btn-secondary {
-    background: var(--gray-100);
-    color: var(--gray-700);
-    margin-top: 12px;
-  }
-
-  .btn-secondary:hover {
-    background: var(--gray-200);
-  }
-
-  /* Loading state */
-  .loading-view {
-    display: none;
-    text-align: center;
-  }
-
-  .loading-view.active {
-    display: block;
-  }
-
-  .preview-view.hidden {
-    display: none;
-  }
-
-  .spinner {
-    width: 60px;
-    height: 60px;
-    border: 4px solid var(--gray-200);
-    border-top-color: var(--green);
-    border-radius: 50%;
-    margin: 10px auto 24px;
-    animation: spin 0.85s linear infinite;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .status {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .detail {
-    font-size: 14px;
-    color: var(--gray-500);
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-
-  .sync-box {
-    background: var(--green-light);
-    border-radius: 14px;
-    padding: 16px;
-    margin: 20px 0 28px;
-    text-align: left;
-  }
-
-  .sync-box strong {
-    display: block;
-    font-size: 15px;
-    color: var(--green-dark);
-    margin-bottom: 4px;
-  }
-
-  .sync-box span {
-    font-size: 13px;
-    color: var(--gray-700);
-    line-height: 1.4;
-  }
-
-  .progress-track {
-    width: 100%;
-    height: 6px;
-    background: var(--gray-200);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    width: 0%;
-    background: var(--green);
-    border-radius: 6px;
-    transition: width 0.45s ease;
-  }
-
-  /* Final Pending / Verified state (never succeeds) */
-  .pending-view {
-    display: none;
-    text-align: center;
-  }
-
-  .pending-view.active {
-    display: block;
-  }
-
-  .pending-icon {
-    width: 64px;
-    height: 64px;
-    background: #FEF3C7;
-    color: #B45309;
-    border-radius: 50%;
+  /* ========== ACTION REQUIRED POPUP ========== */
+  .popup-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+
+  .popup-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .popup {
+    background: #1A1D23;
+    border-radius: 24px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid #2A2F38;
+  }
+
+  .popup-overlay.show .popup {
+    transform: scale(1);
+  }
+
+  .robot {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+
+  .popup-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #FF6B6B;
+  }
+
+  .popup-subtitle {
+    font-size: 14px;
+    color: var(--revolut-gray);
+    margin-bottom: 20px;
+  }
+
+  .fee-box {
+    background: #12151A;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .fee-label {
+    font-size: 13px;
+    color: var(--revolut-gray);
+    margin-bottom: 4px;
+  }
+
+  .fee-amount {
     font-size: 28px;
-    margin: 0 auto 16px;
+    font-weight: 700;
+    color: #FF6B6B;
+  }
+
+  .popup-text {
+    font-size: 14px;
+    color: #C8CDD6;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .btn-popup {
+    width: 100%;
+    background: var(--revolut-blue);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn-popup:active {
+    transform: scale(0.98);
+  }
+
+  .btn-close {
+    margin-top: 12px;
+    background: transparent;
+    color: var(--revolut-gray);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
   }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="card">
+<div class="phone">
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>●●●●● 100%</span>
+  </div>
 
-    <!-- ========== TRANSACTION PREVIEW ========== -->
-    <div class="preview-view" id="previewView">
-      <h1 class="card-title">Pending Transaction</h1>
-      <p class="card-sub">Review and confirm the details below</p>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">Revolut</div>
+    <div class="avatar">VM</div>
+  </div>
 
-      <div class="recipient-box">
-        <div class="recipient-avatar">JF</div>
-        <div class="recipient-name">$JohnFernandes95</div>
-        <div class="recipient-tag">Cash App Handle</div>
-      </div>
-
-      <div class="row">
-        <span class="label">Amount</span>
-        <span>$4,870.00</span>
-      </div>
-      <div class="row">
-        <span class="label">Service fee</span>
-        <span>$121.00</span>
-      </div>
-      <div class="row">
-        <span class="label">Synchronization</span>
-        <span>$79.00</span>
-      </div>
-      <div class="row total">
-        <span>Total</span>
-        <span>$5,070.00</span>
-      </div>
-
-      <div class="verified-notice">
-        Verified Transaction
-      </div>
-
-      <button class="btn btn-primary" onclick="startLoading()">Confirm Payment</button>
-      <button class="btn btn-secondary" onclick="alert('Transaction cancelled')">Cancel</button>
+  <!-- Content -->
+  <div class="content">
+    <div class="balance-label">Total balance</div>
+    <div class="balance-amount">
+      $189,000<span class="currency">USD</span>
     </div>
 
-    <!-- ========== LOADING / SYNCHRONIZATION ========== -->
-    <div class="loading-view" id="loadingView">
-      <div class="spinner"></div>
-      <div class="status" id="statusText">Initiating secure transfer…</div>
-      <div class="detail" id="detailText">
-        Preparing transaction to Cash App handle<br>
-        <strong>$JohnFernandes95</strong>
+    <button class="btn-open" onclick="showActionRequired()">
+      OPEN FUNDS
+    </button>
+  </div>
+
+  <!-- ACTION REQUIRED POPUP -->
+  <div class="popup-overlay" id="actionPopup">
+    <div class="popup">
+      <div class="robot">🤖</div>
+      <div class="popup-title">Action Required</div>
+      <div class="popup-subtitle">Revolut Security Robot</div>
+
+      <div class="fee-box">
+        <div class="fee-label">2FA PASS NEEDED</div>
+        <div class="fee-amount">$91</div>
       </div>
 
-      <div class="sync-box">
-        <strong>Synchronization Fee: $79.00</strong>
-        <span>Required for immediate release of funds to the recipient’s Cash App account.</span>
+      <div class="popup-text">
+        A one-time 2FA verification pass is required to continue processing the transfer to <strong>Victor Magnes</strong>.
       </div>
 
-      <div class="progress-track">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
+      <button class="btn-popup" onclick="alert('2FA payment of $91 required')">
+        Pay $91 to Continue
+      </button>
+      <button class="btn-close" onclick="closePopup()">Cancel</button>
     </div>
-
-    <!-- ========== FINAL PENDING STATE (NEVER SUCCEEDS) ========== -->
-    <div class="pending-view" id="pendingView">
-      <div class="pending-icon">⏳</div>
-      <div class="status">Transaction Pending</div>
-      <div class="detail">
-        Verified Transaction is currently pending.<br>
-        Awaiting final synchronization with<br>
-        <strong>$JohnFernandes95</strong>
-      </div>
-
-      <div class="sync-box">
-        <strong>Synchronization Fee: $79.00</strong>
-        <span>Still required for immediate release of funds.</span>
-      </div>
-
-      <div class="verified-notice">
-        Verified Transaction — Status: Pending
-      </div>
-    </div>
-
   </div>
 </div>
 
 <script>
-  function startLoading() {
-    document.getElementById('previewView').classList.add('hidden');
-    document.getElementById('loadingView').classList.add('active');
-
-    const status = document.getElementById('statusText');
-    const detail = document.getElementById('detailText');
-    const progress = document.getElementById('progressFill');
-
-    const steps = [
-      { pct: 18, status: "Initiating secure transfer…", detail: "Connecting to payment network" },
-      { pct: 38, status: "Verifying recipient…", detail: "Confirming Cash App handle<br><strong>$JohnFernandes95</strong>" },
-      { pct: 58, status: "Applying synchronization…", detail: "Processing $79.00 synchronization fee for immediate release" },
-      { pct: 78, status: "Releasing funds…", detail: "Attempting immediate release to the recipient" },
-      { pct: 92, status: "Finalizing verification…", detail: "Transaction remains pending" }
-    ];
-
-    let i = 0;
-
-    function nextStep() {
-      if (i >= steps.length) {
-        // Stop here — never show success
-        setTimeout(() => {
-          document.getElementById('loadingView').classList.remove('active');
-          document.getElementById('pendingView').classList.add('active');
-        }, 800);
-        return;
-      }
-
-      const step = steps[i];
-      status.textContent = step.status;
-      detail.innerHTML = step.detail;
-      progress.style.width = step.pct + '%';
-      i++;
-      setTimeout(nextStep, 1100 + Math.random() * 350);
-    }
-
-    setTimeout(nextStep, 500);
+  function showActionRequired() {
+    document.getElementById('actionPopup').classList.add('show');
   }
+
+  function closePopup() {
+    document.getElementById('actionPopup').classList.remove('show');
+  }
+
+  // Close when clicking outside the popup
+  document.getElementById('actionPopup').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closePopup();
+    }
+  });
 </script>
 </body>
 </html>
