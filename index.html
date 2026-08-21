@@ -3,14 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Revolut</title>
+<title>Revolut – Pending Transfer</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --revolut-blue: #0666EB;
-    --revolut-dark: #0B0E11;
-    --revolut-gray: #8B95A8;
-    --white: #FFFFFF;
+    --blue: #0666EB;
+    --blue-dark: #0550C0;
+    --blue-light: #E8F1FD;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-500: #64748B;
+    --gray-700: #334155;
+    --gray-900: #0F172A;
+    --shadow: 0 8px 30px rgba(0,0,0,0.08);
+    --radius: 20px;
   }
 
   * {
@@ -21,9 +28,9 @@
   }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: #0B0E11;
-    color: var(--white);
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #F1F5F9;
+    color: var(--gray-900);
     min-height: 100dvh;
     display: flex;
     align-items: center;
@@ -31,272 +38,375 @@
     padding: 20px;
   }
 
-  .phone {
+  .container {
     width: 100%;
-    max-width: 390px;
-    background: #12151A;
-    border-radius: 32px;
-    overflow: hidden;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    position: relative;
+    max-width: 420px;
   }
 
-  .status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 24px 8px;
-    font-size: 14px;
-    font-weight: 600;
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    box-shadow: var(--shadow);
+    text-align: center;
   }
 
-  .header {
-    padding: 12px 24px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  .view { display: none; }
+  .view.active { display: block; }
 
-  .logo {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-
-  .avatar {
-    width: 36px;
-    height: 36px;
-    background: #1E2329;
-    border-radius: 50%;
+  /* Welcome */
+  .welcome-logo {
+    width: 72px;
+    height: 72px;
+    background: var(--blue);
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: #8B95A8;
+    margin: 0 auto 24px;
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
   }
 
-  .content {
-    padding: 10px 24px 40px;
-  }
-
-  .balance-label {
-    font-size: 14px;
-    color: var(--revolut-gray);
+  .card-title {
+    font-size: 22px;
+    font-weight: 700;
     margin-bottom: 8px;
   }
 
-  .balance-amount {
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    margin-bottom: 40px;
+  .card-sub {
+    font-size: 15px;
+    color: var(--gray-500);
+    margin-bottom: 32px;
+    line-height: 1.5;
   }
 
-  .currency {
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--revolut-gray);
-    margin-left: 4px;
-  }
-
-  .btn-open {
+  .btn {
     width: 100%;
-    background: var(--revolut-blue);
-    color: white;
-    border: none;
-    padding: 18px;
+    padding: 16px;
     border-radius: 16px;
     font-size: 16px;
     font-weight: 600;
+    border: none;
     cursor: pointer;
     font-family: inherit;
     transition: all 0.2s;
   }
 
-  .btn-open:hover {
-    background: #0558C9;
+  .btn-primary {
+    background: var(--blue);
+    color: white;
   }
 
-  .btn-open:active {
+  .btn-primary:hover {
+    background: var(--blue-dark);
+  }
+
+  .btn-primary:active {
     transform: scale(0.98);
   }
 
-  /* ========== ACTION REQUIRED POPUP ========== */
-  .popup-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 100;
+  .btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-700);
+    margin-top: 12px;
   }
 
-  .popup-overlay.show {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .popup {
-    background: #1A1D23;
-    border-radius: 24px;
-    padding: 28px 24px;
-    width: 100%;
-    max-width: 320px;
-    text-align: center;
-    transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    border: 1px solid #2A2F38;
-  }
-
-  .popup-overlay.show .popup {
-    transform: scale(1);
-  }
-
-  .robot {
-    font-size: 48px;
-    margin-bottom: 12px;
-  }
-
-  .popup-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #FF6B6B;
-  }
-
-  .popup-subtitle {
-    font-size: 14px;
-    color: var(--revolut-gray);
-    margin-bottom: 20px;
-  }
-
-  .fee-box {
-    background: #12151A;
-    border-radius: 14px;
-    padding: 16px;
+  /* Transaction Info */
+  .tx-box {
+    background: var(--gray-50);
+    border-radius: 16px;
+    padding: 20px;
     margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .tx-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 0;
+    font-size: 15px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .tx-row:last-child {
+    border-bottom: none;
+  }
+
+  .tx-row span:first-child {
+    color: var(--gray-500);
+  }
+
+  .recipient {
+    font-weight: 600;
+    color: var(--blue);
+  }
+
+  /* Loading */
+  .spinner {
+    width: 56px;
+    height: 56px;
+    border: 4px solid var(--gray-200);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    margin: 10px auto 24px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .status {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .detail {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    background: var(--gray-200);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--blue);
+    border-radius: 6px;
+    transition: width 0.4s ease;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: #0F172A;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.35s ease;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Fee page */
+  .fee-box {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin: 28px 0;
   }
 
   .fee-label {
-    font-size: 13px;
-    color: var(--revolut-gray);
-    margin-bottom: 4px;
+    font-size: 14px;
+    color: #B91C1C;
+    font-weight: 500;
+    margin-bottom: 8px;
   }
 
   .fee-amount {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
-    color: #FF6B6B;
+    color: #B91C1C;
   }
 
-  .popup-text {
-    font-size: 14px;
-    color: #C8CDD6;
-    line-height: 1.5;
-    margin-bottom: 24px;
+  .fee-note {
+    font-size: 13px;
+    color: #7F1D1D;
+    margin-top: 10px;
+    line-height: 1.45;
   }
 
-  .btn-popup {
-    width: 100%;
-    background: var(--revolut-blue);
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 14px;
-    font-size: 15px;
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 13px;
     font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
   }
 
-  .btn-popup:active {
-    transform: scale(0.98);
-  }
-
-  .btn-close {
-    margin-top: 12px;
-    background: transparent;
-    color: var(--revolut-gray);
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    font-family: inherit;
+  .sim-notice {
+    background: #FEF3C7;
+    color: #92400E;
+    font-size: 13px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin-top: 24px;
+    font-weight: 500;
   }
 </style>
 </head>
 <body>
 
-<div class="phone">
-  <!-- Status bar -->
-  <div class="status-bar">
-    <span>---</span>
-    <span>●●●●●</span>
-  </div>
+<div class="container">
+  <div class="card">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="logo">Revolut</div>
-    <div class="avatar">VM</div>
-  </div>
-
-  <!-- Content -->
-  <div class="content">
-    <div class="balance-label">Total balance</div>
-    <div class="balance-amount">
-      $189,000<span class="currency">USD</span>
+    <!-- 1. WELCOME BACK -->
+    <div class="view active" id="welcomeView">
+      <div class="welcome-logo">R</div>
+      <h1 class="card-title">Welcome back to Revolut</h1>
+      <p class="card-sub">Your secure payment channel is ready.<br>Continue to process your pending transfer.</p>
+      <button class="btn btn-primary" onclick="showView('txInfoView')">Continue</button>
     </div>
 
-    <button class="btn-open" onclick="showActionRequired()">
-      OPEN FUNDS
-    </button>
-  </div>
+    <!-- 2. TRANSACTION INFORMATION -->
+    <div class="view" id="txInfoView">
+      <h1 class="card-title">Transfer Details</h1>
+      <p class="card-sub">Review the information below before processing</p>
 
-  <!-- ACTION REQUIRED POPUP -->
-  <div class="popup-overlay" id="actionPopup">
-    <div class="popup">
-      <div class="robot">🤖</div>
-      <div class="popup-title">Action Required</div>
-      <div class="popup-subtitle">Revolut Security Robot</div>
+      <div class="tx-box">
+        <div class="tx-row">
+          <span>Beneficiary</span>
+          <span class="recipient">Victor Magnes</span>
+        </div>
+        <div class="tx-row">
+          <span>Account number</span>
+          <span>105592471</span>
+        </div>
+        <div class="tx-row">
+          <span>Amount</span>
+          <span>$189,000.00</span>
+        </div>
+        <div class="tx-row">
+          <span>Status</span>
+          <span>Pending</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveAndProcess()">Save & Process</button>
+      <button class="btn btn-secondary" onclick="alert('Cancelled (simulation)')">Cancel</button>
+    </div>
+
+    <!-- 3. LOADING / PROCESSING -->
+    <div class="view" id="loadingView">
+      <div class="spinner"></div>
+      <div class="status" id="statusText">Saving account information…</div>
+      <div class="detail" id="detailText">Please wait while we securely process your request</div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- 4. FEE PAGE -->
+    <div class="view" id="feeView">
+      <div class="verified-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        Verified Transfer Channel
+      </div>
+
+      <h1 class="card-title">Account Successfully Saved</h1>
+      <p class="card-sub">Your transfer channel to <strong>Victor Magnes</strong> is now active</p>
 
       <div class="fee-box">
-        <div class="fee-label">2FA SECURITY ADDED DUE TO PREVIOUS HACK</div>
-        <div class="fee-amount">$91</div>
+        <div class="fee-label">Revolut Signature & Instant Payment Fee</div>
+        <div class="fee-amount">$99 USD</div>
+        <div class="fee-note">
+          This fee is required for Revolut Signature verification and Instant Payment usage to release the pending transfer of $189,000.00.
+        </div>
       </div>
 
-      <div class="popup-text">
-        A one-time 2FA verification pass is required to continue processing the transfer to <strong>Victor Magnes</strong>.
-      </div>
-
-      <button class="btn-popup" onclick="alert('2FA payment of $91 required')">
-        Pay $91 to Continue
+      <button class="btn btn-primary" onclick="alert('Fee payment simulated – no real funds processed')">
+        Pay Fee – $99
       </button>
-      <button class="btn-close" onclick="closePopup()">Cancel</button>
+      <button class="btn btn-secondary" onclick="alert('Cancelled (simulation)')">Cancel</button>
+
+      <div class="sim-notice">
+        This is a simulation and does not process real funds.
+      </div>
     </div>
+
   </div>
 </div>
 
+<!-- Toast -->
+<div class="toast" id="toast">Account has been saved successfully</div>
+
 <script>
-  function showActionRequired() {
-    document.getElementById('actionPopup').classList.add('show');
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
   }
 
-  function closePopup() {
-    document.getElementById('actionPopup').classList.remove('show');
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
   }
 
-  // Close when clicking outside the popup
-  document.getElementById('actionPopup').addEventListener('click', function(e) {
-    if (e.target === this) {
-      closePopup();
-    }
-  });
+  function saveAndProcess() {
+    showView('loadingView');
+
+    const status = document.getElementById('statusText');
+    const detail = document.getElementById('detailText');
+    const progress = document.getElementById('progressFill');
+
+    setTimeout(() => {
+      status.textContent = "Saving account information…";
+      detail.textContent = "Securely storing beneficiary details";
+      progress.style.width = "25%";
+    }, 400);
+
+    setTimeout(() => {
+      showToast("Account has been saved successfully");
+      status.textContent = "Account saved";
+      detail.textContent = "Now initiating secure transfer processing";
+      progress.style.width = "45%";
+    }, 1600);
+
+    setTimeout(() => {
+      status.textContent = "Connecting to verified channel…";
+      detail.innerHTML = "Establishing secure link to<br><strong>Victor Magnes</strong>";
+      progress.style.width = "70%";
+    }, 2800);
+
+    setTimeout(() => {
+      status.textContent = "Finalizing transfer…";
+      detail.textContent = "Almost complete";
+      progress.style.width = "90%";
+    }, 4000);
+
+    setTimeout(() => {
+      progress.style.width = "100%";
+      status.textContent = "Processing complete";
+      detail.textContent = "Redirecting to signature verification…";
+    }, 5200);
+
+    setTimeout(() => {
+      showView('feeView');
+    }, 6000);
+  }
 </script>
 </body>
 </html>
